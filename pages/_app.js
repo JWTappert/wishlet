@@ -3,15 +3,28 @@ import React from "react";
 import "../styles/globals.css";
 import 'antd/dist/antd.css';
 
-function MyApp({ Component, pageProps }) {
+import { Layout, Menu } from "antd";
+import Nav from "components/nav/nav";
 
+function MyApp({ Component, pageProps }) {
+  const { Header, Footer, Content } = Layout;
   return (
       <>
       <Head>
-        <title>Create Next App</title>
+        <title>Wishlet</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+        <Layout>
+          <Header>
+            <Nav />
+          </Header>
+          <Layout>
+            <Content style={{ height: '89.9vh', margin: '0 10%' }}>
+            <Component {...pageProps} />
+            </Content>
+          </Layout>
+          <Footer>Footer</Footer>
+        </Layout>
       </>
   );
 }
