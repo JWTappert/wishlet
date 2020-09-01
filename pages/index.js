@@ -1,3 +1,8 @@
+import React from "react";
+import { DatePicker } from "antd";
+
 export default function Home() {
-  return <h1>here</h1>;
+  return <div>
+    <DatePicker />
+  </div>
 }
