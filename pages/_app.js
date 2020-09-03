@@ -6,10 +6,12 @@ import 'antd/dist/antd.css';
 import { Layout, Menu } from "antd";
 import Nav from "components/nav/nav";
 
+import FirebaseProvider from "utils/firebase";
+
 function MyApp({ Component, pageProps }) {
   const { Header, Footer, Content } = Layout;
   return (
-      <>
+      <FirebaseProvider>
       <Head>
         <title>Wishlet</title>
         <link rel="icon" href="/favicon.ico" />
@@ -25,7 +27,7 @@ function MyApp({ Component, pageProps }) {
           </Layout>
           <Footer>Footer</Footer>
         </Layout>
-      </>
+      </FirebaseProvider>
   );
 }
 
