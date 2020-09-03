@@ -3,6 +3,38 @@ import Link from "next/link";
 import {Avatar, List, Space} from "antd";
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 
+const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
+
+export default function Wishlist({ wishlist }) {
+  return (
+    <List
+      itemLayout="horizontal"
+      size="large"
+      dataSource={wishlist}
+      pagination={{
+        onChange: page => console.log({page}),
+        pageSize: 2
+      }}
+      renderItem={item => (
+      <List.Item key={item.name} actions={[
+        <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+        <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+        <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+      ]}>
+        <List.Item.Meta
+          avatar={<Avatar shape="square" size={100} src={item.image} />}
+          title={<Link href=""><a>{item.name}</a></Link>}
+          description={`Price: ${item.price} - Category: ${item.category}/${item.subcategory}`} />
+      </List.Item>
+    )}>
+    </List>
+  )
+}
 const data = [
   {
     name: 'SVG Animations: From Common UX Implementations to Complex Responsive Animation',
@@ -32,37 +64,4 @@ const data = [
     category: 'electronics',
     subcategory: 'keyboard'
   },
-  ];
-
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
-
-export default function Wishlist({}) {
-  return (
-    <List
-      itemLayout="horizontal"
-      size="large"
-      dataSource={data}
-      pagination={{
-        onChange: page => console.log({page}),
-        pageSize: 2
-      }}
-      renderItem={item => (
-      <List.Item key={item.name} actions={[
-        <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-        <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-        <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-      ]}>
-        <List.Item.Meta
-          avatar={<Avatar shape="square" size={100} src={item.image} />}
-          title={<Link href=""><a>{item.name}</a></Link>}
-          description={`Price: ${item.price} - Category: ${item.category}/${item.subcategory}`} />
-      </List.Item>
-    )}>
-    </List>
-  )
-}
+];
