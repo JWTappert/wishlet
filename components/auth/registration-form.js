@@ -7,24 +7,24 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 10, span: 16 },
+  wrapperCol: { span: 32 },
 };
 
 export default function RegistrationForm({}) {
-  const { Title } = Typography;
+  const { Title, Text } = Typography;
   const [form] = Form.useForm();
+  const [error, setError] = useState(null);
 
   const handleSubmit = values => {
     const { email, password } = values;
+    setError(null);
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      setError({code: error.code, message: error.message });
     });
   }
 
   return (
-      <Card style={{ width: '50%' }}>
+      <Card style={{ width: '50%', textAlign: 'center' }}>
         <Title>Register</Title>
         <Form {...layout} name="register" form={form} onFinish={handleSubmit} scrollToFirstError>
           <Form.Item
@@ -63,6 +63,9 @@ export default function RegistrationForm({}) {
           >
             <Input.Password />
           </Form.Item>
+          {error && (<Form.Item style={{ justifyContent: 'center' }}>
+            <Text style={{ color: 'red' }}>{error.message}</Text>
+          </Form.Item>)}
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
