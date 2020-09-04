@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
 import app from "firebase/app";
+import 'firebase/auth'
 
 export default function FirebaseProvider({ children }) {
-  console.log('here', process.env.FIREBASE_DATABASE_URL);
   if (!app.apps.length) {
     app.initializeApp({
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
