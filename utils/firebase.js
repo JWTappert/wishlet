@@ -1,6 +1,8 @@
 import React, { createContext } from "react";
 import app from "firebase/app";
 import 'firebase/auth'
+import firebase from "firebase";
+import {mapUserData, setUserCookie} from "../components/auth";
 
 export default function FirebaseProvider({ children }) {
   if (!app.apps.length) {
@@ -22,5 +24,35 @@ export default function FirebaseProvider({ children }) {
   )
 }
 
-const FirebaseContext = createContext(null)
-export { FirebaseContext }
+function onAuthStateChange(callback) {
+  return app.auth().onAuthStateChanged((user) => {
+    if (user) {
+      callback({loggedIn: true, email: user.email});
+    } else {
+      callback({loggedIn: false});
+    }
+  });
+}
+
+function signIn(email, password) {
+  app.auth().signInWithEmailAndPassword(email, password)
+    .then(function({ user }) {
+      // setLoading(false);
+      // const userData = mapUserData()
+      // setUserCookie(userData);
+      // router.push('/');
+    })
+    .catch(function(error) {
+      // setError({code: error.code, message: error.message });
+      // setLoading(false);
+    });
+}
+
+function signOut() {
+  app.auth().signOut();
+}
+
+const FirebaseContext = createContext(null);
+const UserContext = createContext({ loggedIn: false, email: "" });
+
+export { FirebaseContext, UserContext, onAuthStateChange, signIn, signOut }

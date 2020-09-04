@@ -1,7 +1,6 @@
 import 'firebase/auth'
 import cookies from 'js-cookie'
 import RegistrationForm from "./registration-form";
-// import SignInForm from "./signin-form";
 
 const getUserFromCookie = () => {
   const cookie = cookies.get('auth')

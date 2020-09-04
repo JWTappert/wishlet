@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
+import {useRouter} from "next/router";
 import {Card, Form, Input, Button, Typography} from "antd";
 import firebase from "firebase";
+import {mapUserData, setUserCookie} from "./index";
 
 const layout = {
   labelCol: { span: 6 },
@@ -12,6 +14,7 @@ const tailLayout = {
 
 export default function RegistrationForm({}) {
   const { Title, Text, Link } = Typography;
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -22,8 +25,11 @@ export default function RegistrationForm({}) {
     setError(null);
     setLoading(true);
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(function(res) {
+      .then(function({ user }) {
         setLoading(false);
+        const userData = mapUserData()
+        setUserCookie(userData);
+        router.push('/');
       })
       .catch(function(error) {
       setError({code: error.code, message: error.message });
