@@ -11,22 +11,40 @@ const tailLayout = {
 };
 
 export default function RegistrationForm({}) {
-  const { Title, Text } = Typography;
+  const { Title, Text, Link } = Typography;
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isSignIn, setIsSignIn] = useState(false);
 
-  const handleSubmit = values => {
+  const handleSignIn = values => {
     const { email, password } = values;
     setError(null);
+    setLoading(true);
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function(res) {
+        setLoading(false);
+      })
+      .catch(function(error) {
+      setError({code: error.code, message: error.message });
+      setLoading(false);
+    });
+  }
+
+  const handleRegister = values => {
+    const { email, password } = values;
+    setError(null);
+    setLoading(true);
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
       setError({code: error.code, message: error.message });
+      setLoading(false);
     });
   }
 
   return (
       <Card style={{ width: '50%', textAlign: 'center' }}>
-        <Title>Register</Title>
-        <Form {...layout} name="register" form={form} onFinish={handleSubmit} scrollToFirstError>
+        <Title>{isSignIn ? 'Sign In' : 'Register' }</Title>
+        <Form {...layout} name="register" form={form} onFinish={isSignIn ? handleSignIn : handleRegister} scrollToFirstError>
           <Form.Item
             style={{ marginBottom: '1em'}}
             label="Email"
@@ -63,11 +81,20 @@ export default function RegistrationForm({}) {
           >
             <Input.Password />
           </Form.Item>
+          <Form.Item style={{ justifyContent: 'center' }}>
+            {!isSignIn && (
+              <Text>Already have an account? <Link onClick={() => setIsSignIn(true)}>Sign in</Link>.</Text>
+            )}
+            {isSignIn && (
+              <Text>Don't have an account? <Link onClick={() => setIsSignIn(false)}>Register</Link>.</Text>
+            )}
+          </Form.Item>
           {error && (<Form.Item style={{ justifyContent: 'center' }}>
             <Text style={{ color: 'red' }}>{error.message}</Text>
           </Form.Item>)}
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">Submit</Button>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              {isSignIn ? 'Sign in' : 'Register'}</Button>
           </Form.Item>
         </Form>
       </Card>
