@@ -91,7 +91,45 @@ function getUserProfile(uid) {
   });
 }
 
+// updateUserProfile(uid, profile)
+
+function addWishlist(uid, name, link) {
+  return new Promise((resolve, reject) => {
+    app.database().ref('wishlists')
+      .push({
+        uid: uid,
+        name: name,
+        link: link
+      })
+      .then(() => resolve())
+      .catch(error => reject(error))
+  });
+}
+
+function getWishlistsForUser(uid) {
+  return new Promise((resolve, reject) => {
+    app.database().ref(`users/${uid}/wishlists`)
+      .once('value')
+      .then((snapshot) => {
+        const wishlistIds = snapshot.val();
+        console.log(wishlistIds);
+        resolve(snapshot.val())
+      })
+      .catch(error => reject(error))
+  });
+}
+
 const FirebaseContext = createContext(null);
 const UserContext = createContext({ loggedIn: false, email: "" });
 
-export { FirebaseContext, UserContext, onAuthStateChange, signIn, signUp, signOut, getUserProfile };
+export {
+  FirebaseContext,
+  UserContext,
+  onAuthStateChange,
+  signIn,
+  signUp,
+  signOut,
+  getUserProfile,
+  addWishlist,
+  getWishlistsForUser
+};

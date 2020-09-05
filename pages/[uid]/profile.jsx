@@ -11,7 +11,11 @@ export default function Profile() {
 
   useEffect(() => {
     getUserProfile(uid).then(snapshot => {
-      setUser(snapshot.val());
+      const user = {
+        uid: snapshot.key,
+        ...snapshot.val()
+      }
+      setUser(user);
     })
       .catch(error => console.error(error));
   });
