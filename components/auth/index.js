@@ -1,6 +1,6 @@
 import 'firebase/auth'
 import cookies from 'js-cookie'
-import RegistrationForm from "./registration-form";
+import SignUpForm from "./sign-up-form";
 
 const getUserFromCookie = () => {
   const cookie = cookies.get('auth')
@@ -29,4 +29,4 @@ const mapUserData = (user) => {
   }
 };
 
-export { RegistrationForm, getUserFromCookie, setUserCookie, removeUserCookie, mapUserData, };
+export { SignUpForm, getUserFromCookie, setUserCookie, removeUserCookie, mapUserData, };

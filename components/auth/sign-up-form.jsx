@@ -11,13 +11,13 @@ const tailLayout = {
   wrapperCol: { span: 32 },
 };
 
-export default function RegistrationForm({}) {
+export default function SignUpForm({}) {
   const { Title, Text, Link } = Typography;
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const handleSignIn = values => {
     const { email, password } = values;
@@ -45,8 +45,8 @@ export default function RegistrationForm({}) {
 
   return (
       <Card style={{ width: '50%', textAlign: 'center' }}>
-        <Title>{isSignIn ? 'Sign In' : 'Register' }</Title>
-        <Form {...layout} name="register" form={form} onFinish={isSignIn ? handleSignIn : handleRegister} scrollToFirstError>
+        <Title>{isSignUp ? 'Sign Up' : 'Sign In'}</Title>
+        <Form {...layout} name="register" form={form} onFinish={isSignUp ? handleRegister : handleSignIn} scrollToFirstError>
           <Form.Item
             style={{ marginBottom: '1em'}}
             label="Email"
@@ -84,11 +84,11 @@ export default function RegistrationForm({}) {
             <Input.Password />
           </Form.Item>
           <Form.Item style={{ justifyContent: 'center' }}>
-            {!isSignIn && (
-              <Text>Already have an account? <Link onClick={() => setIsSignIn(true)}>Sign in</Link>.</Text>
+            {!isSignUp && (
+              <Text>Don't have an account? <Link onClick={() => setIsSignUp(true)}>Sign Up</Link>.</Text>
             )}
-            {isSignIn && (
-              <Text>Don't have an account? <Link onClick={() => setIsSignIn(false)}>Register</Link>.</Text>
+            {isSignUp && (
+              <Text>Already have an account? <Link onClick={() => setIsSignUp(false)}>Sign in</Link>.</Text>
             )}
           </Form.Item>
           {error && (<Form.Item style={{ justifyContent: 'center' }}>
@@ -96,7 +96,7 @@ export default function RegistrationForm({}) {
           </Form.Item>)}
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit" loading={loading}>
-              {isSignIn ? 'Sign in' : 'Register'}</Button>
+              {isSignUp ? 'Sign Up' : 'Sign in'}</Button>
           </Form.Item>
         </Form>
       </Card>

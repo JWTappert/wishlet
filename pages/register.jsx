@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import {RegistrationForm} from "components/auth";
+import {SignUpForm} from "components/auth";
 
 export default function Register() {
   return (
     <Container>
-     <RegistrationForm />
+     <SignUpForm />
     </Container>
   )
 }

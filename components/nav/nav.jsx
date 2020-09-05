@@ -13,17 +13,20 @@ export default function Nav({}) {
 
   const requestSignOut = useCallback(() => {
     signOut();
+    router.push('/');
   }, []);
 
   return (
     <>
     <Menu theme={'dark'} mode="horizontal" style={{textAlign: 'right'}}>
       <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>List</Menu.Item>
-      {!user.loggedIn && <Menu.Item icon={<UserOutlined />} onClick={requestSignOut}>Sign Out</Menu.Item>}
+      {!user.loggedIn && (
+        <Menu.Item icon={<UserOutlined />} onClick={() => router.push('/register')}>Sign In</Menu.Item>
+      )}
       {user.loggedIn &&
         (<SubMenu icon={<UserOutlined />} title="User">
           <Menu.Item onClick={() => router.push(`/${user.uid}/profile`)}>Profile</Menu.Item>
-          <Menu.Item onClick={() => router.push('/register')}>Sign Out</Menu.Item>
+          <Menu.Item onClick={requestSignOut}>Sign Out</Menu.Item>
         </SubMenu>
       )}
     </Menu>
