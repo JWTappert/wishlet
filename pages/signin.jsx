@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {SignUpForm} from "components/auth";
 
-export default function Register() {
+export default function Signin() {
   return (
     <Container>
      <SignUpForm />

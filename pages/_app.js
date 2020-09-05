@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import "../styles/globals.css";
 import 'antd/dist/antd.css';
 
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import Nav from "components/nav/nav";
 
 import FirebaseProvider, {onAuthStateChange, UserContext} from "utils/firebase";
@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }) {
       unsubscribe();
     }
   }, []);
+
   return (
       <FirebaseProvider>
         <UserContext.Provider value={user}>

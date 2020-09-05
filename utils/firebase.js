@@ -1,8 +1,10 @@
 import React, { createContext } from "react";
 import app from "firebase/app";
 import 'firebase/auth'
-import firebase from "firebase";
+import "firebase/firebase-database";
 import {mapUserData, setUserCookie} from "../components/auth";
+
+const WISHLET = 'wishlet-e7d50';
 
 export default function FirebaseProvider({ children }) {
   if (!app.apps.length) {
@@ -40,6 +42,7 @@ function signIn(email, password) {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         const userData = mapUserData(user)
+
         setUserCookie(userData);
         resolve();
       })
@@ -51,7 +54,26 @@ function signUp(email, password) {
   return new Promise((resolve, reject) => {
     app.auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => resolve())
+      .then(({user}) => {
+        if (user) {
+          app.database().ref('users').child(user.uid).set({
+            email: user.email,
+            displayName: '',
+            bio: '',
+            location: '',
+            occupation: '',
+            website: '',
+            facebook: '',
+            twitter: '',
+            youtube: '',
+            pinterest: '',
+            instagram: '',
+            followers: 0,
+            following: 0,
+          });
+        }
+        resolve();
+      })
       .catch(error => reject(error));
     });
 }
@@ -60,7 +82,16 @@ function signOut() {
   app.auth().signOut();
 }
 
+function getUserProfile(uid) {
+  return new Promise((resolve, reject) => {
+    app.database().ref(`users/${uid}`)
+      .once('value')
+      .then((snapshot) => resolve(snapshot))
+      .catch(error => reject(error));
+  });
+}
+
 const FirebaseContext = createContext(null);
 const UserContext = createContext({ loggedIn: false, email: "" });
 
-export { FirebaseContext, UserContext, onAuthStateChange, signIn, signUp, signOut }
+export { FirebaseContext, UserContext, onAuthStateChange, signIn, signUp, signOut, getUserProfile };

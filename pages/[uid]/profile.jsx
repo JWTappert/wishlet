@@ -1,9 +1,30 @@
-import React, { useContext } from "react";
-import {UserContext} from "utils/firebase";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import {getUserProfile} from "utils/firebase";
+import {useRouter} from "next/router";
+import {ProfileLayout} from "components/profile";
 
 export default function Profile() {
-  const user = useContext(UserContext)
+  const router = useRouter();
+  const { uid } = router.query;
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    getUserProfile(uid).then(snapshot => {
+      setUser(snapshot.val());
+    })
+      .catch(error => console.error(error));
+  }, []);
+
   return (
-    <h1>{user.email}</h1>
+    <ProfileLayout user={user} />
   )
 }
+
+const Container = styled.div`
+  margin: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
