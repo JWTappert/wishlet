@@ -27,7 +27,8 @@ export default function FirebaseProvider({ children }) {
 function onAuthStateChange(callback) {
   return app.auth().onAuthStateChanged((user) => {
     if (user) {
-      callback({loggedIn: true, email: user.email});
+      console.log('firebase user', user);
+      callback({loggedIn: true, email: user.email, uid: user.uid });
     } else {
       callback({loggedIn: false});
     }
