@@ -35,16 +35,24 @@ function onAuthStateChange(callback) {
 }
 
 function signIn(email, password) {
-  app.auth().signInWithEmailAndPassword(email, password)
-    .then(function({ user }) {
-      // setLoading(false);
-      // const userData = mapUserData()
-      // setUserCookie(userData);
-      // router.push('/');
-    })
-    .catch(function(error) {
-      // setError({code: error.code, message: error.message });
-      // setLoading(false);
+  return new Promise((resolve, reject) => {
+    app.auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        const userData = mapUserData(user)
+        setUserCookie(userData);
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function signUp(email, password) {
+  return new Promise((resolve, reject) => {
+    app.auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => resolve())
+      .catch(error => reject(error));
     });
 }
 
@@ -55,4 +63,4 @@ function signOut() {
 const FirebaseContext = createContext(null);
 const UserContext = createContext({ loggedIn: false, email: "" });
 
-export { FirebaseContext, UserContext, onAuthStateChange, signIn, signOut }
+export { FirebaseContext, UserContext, onAuthStateChange, signIn, signUp, signOut }

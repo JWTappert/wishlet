@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import {Input, Menu, Modal} from "antd";
 import {PlusOutlined, UserOutlined} from "@ant-design/icons";
 import {onAuthStateChange, signIn, signOut, UserContext} from "utils/firebase";
@@ -7,6 +8,7 @@ export default function Nav({}) {
   const [user, setUser] = useState({ loggedIn: false });
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChange(setUser);
@@ -15,9 +17,6 @@ export default function Nav({}) {
     }
   }, []);
 
-  const requestSignIn = useCallback((email, password) => {
-    signIn(email, password);
-  });
   const requestSignOut = useCallback(() => {
     signOut();
   }, []);
@@ -27,8 +26,8 @@ export default function Nav({}) {
     <Menu theme={'dark'} mode="horizontal" style={{textAlign: 'right'}}>
       <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>List</Menu.Item>
       {user.loggedIn ?
-        <Menu.Item icon={<UserOutlined />} onClick={requestSignOut}>Logout</Menu.Item> :
-        <Menu.Item icon={<UserOutlined />} onClick={requestSignIn}>Login</Menu.Item>
+        <Menu.Item icon={<UserOutlined />} onClick={requestSignOut}>Sign Out</Menu.Item> :
+        <Menu.Item icon={<UserOutlined />} onClick={() => router.push('/register')}>Sign In</Menu.Item>
       }
     </Menu>
       <Modal

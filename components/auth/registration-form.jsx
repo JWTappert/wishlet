@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {useRouter} from "next/router";
 import {Card, Form, Input, Button, Typography} from "antd";
-import firebase from "firebase";
-import {mapUserData, setUserCookie} from "./index";
+import {signIn, signUp} from "utils/firebase";
 
 const layout = {
   labelCol: { span: 6 },
@@ -24,14 +23,9 @@ export default function RegistrationForm({}) {
     const { email, password } = values;
     setError(null);
     setLoading(true);
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(function({ user }) {
-        setLoading(false);
-        const userData = mapUserData()
-        setUserCookie(userData);
-        router.push('/');
-      })
-      .catch(function(error) {
+    signIn(email, password)
+      .then(() => router.push('/'))
+      .catch((error) => {
       setError({code: error.code, message: error.message });
       setLoading(false);
     });
@@ -41,7 +35,9 @@ export default function RegistrationForm({}) {
     const { email, password } = values;
     setError(null);
     setLoading(true);
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    signUp(email, password)
+      .then(() => router.push('/'))
+      .catch((error) => {
       setError({code: error.code, message: error.message });
       setLoading(false);
     });
