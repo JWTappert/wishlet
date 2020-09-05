@@ -14,7 +14,7 @@ export default function Profile() {
       setUser(snapshot.val());
     })
       .catch(error => console.error(error));
-  }, []);
+  });
 
   return (
     <ProfileLayout user={user} />
