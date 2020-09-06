@@ -1,10 +1,8 @@
 import React, { createContext } from "react";
 import app from "firebase/app";
-import 'firebase/auth'
-import "firebase/firebase-database";
-import {mapUserData, setUserCookie} from "../components/auth";
-
-const WISHLET = 'wishlet-e7d50';
+import "firebase/auth";
+import "firebase/firestore";
+import { mapUserData, setUserCookie } from "../components/auth";
 
 export default function FirebaseProvider({ children }) {
   if (!app.apps.length) {
@@ -16,66 +14,65 @@ export default function FirebaseProvider({ children }) {
       storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
       messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-    })
+      measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    });
   }
   return (
-    <FirebaseContext.Provider value={ app }>
-      { children }
-    </FirebaseContext.Provider>
-  )
+    <FirebaseContext.Provider value={app}>{children}</FirebaseContext.Provider>
+  );
 }
 
 function onAuthStateChange(callback) {
   return app.auth().onAuthStateChanged((user) => {
     if (user) {
-      callback({loggedIn: true, email: user.email, uid: user.uid });
+      callback({ loggedIn: true, email: user.email, uid: user.uid });
     } else {
-      callback({loggedIn: false});
+      callback({ loggedIn: false });
     }
   });
 }
 
 function signIn(email, password) {
   return new Promise((resolve, reject) => {
-    app.auth()
+    app
+      .auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
-        const userData = mapUserData(user)
-
+        const userData = mapUserData(user);
         setUserCookie(userData);
         resolve();
       })
-      .catch(error => reject(error));
+      .catch((error) => reject(error));
   });
 }
 
 function signUp(email, password) {
   return new Promise((resolve, reject) => {
-    app.auth()
+    app
+      .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(({user}) => {
+      .then(({ user }) => {
         if (user) {
-          app.database().ref('users').child(user.uid).set({
+          app.firestore.collection("users").add({
             email: user.email,
-            displayName: '',
-            bio: '',
-            location: '',
-            occupation: '',
-            website: '',
-            facebook: '',
-            twitter: '',
-            youtube: '',
-            pinterest: '',
-            instagram: '',
+            first: "",
+            last: "",
+            location: "",
+            occupation: "",
+            website: "",
+            facebook: "",
+            twitter: "",
+            youtube: "",
+            pinterest: "",
+            instagram: "",
             followers: 0,
             following: 0,
           });
         }
         resolve();
       })
-      .catch(error => reject(error));
-    });
+      .catch((error) => reject(error));
+  });
 }
 
 function signOut() {
@@ -84,38 +81,55 @@ function signOut() {
 
 function getUserProfile(uid) {
   return new Promise((resolve, reject) => {
-    app.database().ref(`users/${uid}`)
-      .once('value')
-      .then((snapshot) => resolve(snapshot))
-      .catch(error => reject(error));
+    app
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          resolve({ uid: snapshot.id, ...snapshot.data() });
+        } else {
+          throw new Error("User does not exist");
+        }
+      })
+      .catch((error) => reject(error));
   });
 }
 
 // updateUserProfile(uid, profile)
 
-function addWishlist(uid, name, link) {
+function addWishlist(uid, name) {
   return new Promise((resolve, reject) => {
-    app.database().ref('wishlists')
-      .push({
+    app
+      .firestore()
+      .collection("wishlists")
+      .add({
         uid: uid,
         name: name,
-        link: link
       })
       .then(() => resolve())
-      .catch(error => reject(error))
+      .catch((error) => reject(error));
   });
 }
 
 function getWishlistsForUser(uid) {
   return new Promise((resolve, reject) => {
-    app.database().ref(`users/${uid}/wishlists`)
-      .once('value')
-      .then((snapshot) => {
-        const wishlistIds = snapshot.val();
-        console.log(wishlistIds);
-        resolve(snapshot.val())
-      })
-      .catch(error => reject(error))
+    if (uid) {
+      app
+        .firestore()
+        .collection("wishlists")
+        .where("uid", "==", uid)
+        .get()
+        .then((querySnapshot) => {
+          const wishlists = [];
+          querySnapshot.forEach((doc) =>
+            wishlists.push({ id: doc.id, ...doc.data() })
+          );
+          resolve(wishlists);
+        })
+        .catch((error) => reject(error));
+    }
   });
 }
 
@@ -131,5 +145,5 @@ export {
   signOut,
   getUserProfile,
   addWishlist,
-  getWishlistsForUser
+  getWishlistsForUser,
 };
