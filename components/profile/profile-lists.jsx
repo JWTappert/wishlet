@@ -10,7 +10,6 @@ import {
   Typography,
   Form,
 } from "antd";
-import AnchorLink from "antd/es/anchor/AnchorLink";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;

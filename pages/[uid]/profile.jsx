@@ -19,7 +19,7 @@ export default function Profile() {
     getUserProfile(uid)
       .then((user) => setUser(user))
       .catch((error) => console.error(error));
-  }, []);
+  }, [uid]);
 
   useEffect(() => {
     getWishlistsForUser(uid)
