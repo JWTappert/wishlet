@@ -18,10 +18,13 @@ export default function Profile() {
     getUserProfile(uid)
       .then((user) => setUser(user))
       .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
     getWishlistsForUser(uid)
       .then((wishlists) => setWishlists(wishlists))
       .catch((error) => console.error(error));
-  }, []);
+  }, [wishlists]);
 
   function handleWishlistAdded(name) {
     return new Promise((resolve, reject) => {

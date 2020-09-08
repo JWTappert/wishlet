@@ -120,15 +120,16 @@ function getWishlistsForUser(uid) {
         .firestore()
         .collection("wishlists")
         .where("uid", "==", uid)
-        .get()
-        .then((querySnapshot) => {
-          const wishlists = [];
-          querySnapshot.forEach((doc) =>
-            wishlists.push({ id: doc.id, ...doc.data() })
-          );
-          resolve(wishlists);
-        })
-        .catch((error) => reject(error));
+        .onSnapshot(
+          (querySnapshot) => {
+            const wishlists = [];
+            querySnapshot.forEach((doc) =>
+              wishlists.push({ id: doc.id, ...doc.data() })
+            );
+            resolve(wishlists);
+          },
+          (error) => reject(error)
+        );
     }
   });
 }
