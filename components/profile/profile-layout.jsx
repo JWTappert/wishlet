@@ -10,6 +10,7 @@ export default function ProfileLayout({
   user,
   wishlists,
   handleWishlistAdded,
+  handleItemAdded,
 }) {
   return (
     <Layout style={{ height: "100%" }}>
@@ -23,6 +24,7 @@ export default function ProfileLayout({
             <ProfileList
               wishlists={wishlists}
               handleWishlistAdded={handleWishlistAdded}
+              handleItemAdded={handleItemAdded}
             />
           </Card>
         </Content>

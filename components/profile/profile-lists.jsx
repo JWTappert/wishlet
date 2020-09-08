@@ -1,27 +1,64 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Tabs, Layout, Menu, Button, Modal, Input } from "antd";
+import {
+  Tabs,
+  Layout,
+  Menu,
+  Button,
+  Modal,
+  Input,
+  Typography,
+  Form,
+} from "antd";
+import AnchorLink from "antd/es/anchor/AnchorLink";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
+const { Title, Text } = Typography;
 
-export default function ProfileList({ wishlists, handleWishlistAdded }) {
-  const [visible, setVisible] = useState(false);
+export default function ProfileList({
+  wishlists,
+  handleWishlistAdded,
+  handleItemAdded,
+}) {
+  const [addListVisible, setAddListVisible] = useState(false);
+  const [addItemVisible, setAddItemVisible] = useState(false);
   const [wishlistName, setWishlistName] = useState("");
+  const [selectedList, setSelectedList] = useState();
+  const [item, setItem] = useState();
 
-  function handleCancel() {
-    setWishlistName("");
-    setVisible(false);
+  function handleCancel(flag) {
+    if (!flag) {
+      setWishlistName("");
+      setAddListVisible(false);
+    } else {
+      setWishlistName("");
+      setAddItemVisible(false);
+    }
   }
 
-  function handleAddListClick() {
-    setVisible(true);
+  function handleAddListClick(flag) {
+    setAddListVisible(true);
   }
 
-  function handleOkClick() {
-    handleWishlistAdded(wishlistName)
-      .then(() => setVisible(false))
-      .catch((error) => console.error(error));
+  function handleAddListItem() {
+    setAddItemVisible(true);
+  }
+
+  function handleListAddedOk() {
+    if (wishlistName) {
+      handleWishlistAdded(wishlistName)
+        .then(() => setAddListVisible(false))
+        .catch((error) => console.error(error));
+    }
+  }
+
+  function handleItemAddedOk() {
+    if (selectedList.id && item.name && item.link) {
+      handleItemAdded(selectedList.id, item)
+        .then(() => setAddItemVisible(false))
+        .catch((error) => console.error(error));
+    }
   }
 
   return (
@@ -33,15 +70,32 @@ export default function ProfileList({ wishlists, handleWishlistAdded }) {
               <Menu>
                 {wishlists &&
                   wishlists.map((list) => (
-                    <Menu.Item key={list.id}>{list.name}</Menu.Item>
+                    <Menu.Item
+                      key={list.id}
+                      onClick={() => setSelectedList(list)}
+                    >
+                      {list.name}
+                    </Menu.Item>
                   ))}
               </Menu>
             </StyledSider>
             <Content>
               <StyledHeader>
+                {selectedList && (
+                  <>
+                    <Title>{selectedList.name}</Title>
+                    <Button onClick={handleAddListItem}>Add Item</Button>
+                  </>
+                )}
                 <Button onClick={handleAddListClick}>Add List</Button>
               </StyledHeader>
-              Content
+              {selectedList &&
+                selectedList.items.map((item) => (
+                  <React.Fragment>
+                    <Title>{item.name}</Title>
+                    <Text>{item.link}</Text>
+                  </React.Fragment>
+                ))}
             </Content>
           </Layout>
         </TabPane>
@@ -50,9 +104,10 @@ export default function ProfileList({ wishlists, handleWishlistAdded }) {
         </TabPane>
       </StyledTabs>
       <Modal
-        visible={visible}
-        onCancel={handleCancel}
-        onOk={handleOkClick}
+        title="Add a List"
+        visible={addListVisible}
+        onCancel={() => handleCancel(0)}
+        onOk={() => handleListAddedOk()}
         bodyStyle={{ padding: "48px 24px 24px 24px" }}
       >
         <Input
@@ -60,6 +115,36 @@ export default function ProfileList({ wishlists, handleWishlistAdded }) {
           value={wishlistName}
           onChange={(e) => setWishlistName(e.target.value)}
         />
+      </Modal>
+      <Modal
+        title="Add an Item"
+        visible={addItemVisible}
+        onCancel={() => handleCancel(1)}
+        onOk={() => handleItemAddedOk()}
+        bodyStyle={{ padding: "48px 24px 24px 24px" }}
+      >
+        <Form>
+          <Form.Item label="Name">
+            <Input
+              type="text"
+              onChange={(e) =>
+                setItem((prevState) => {
+                  return { ...prevState, name: e.target.value };
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Link">
+            <Input
+              type="text"
+              onChange={(e) =>
+                setItem((prevState) => {
+                  return { ...prevState, link: e.target.value };
+                })
+              }
+            />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );
@@ -71,8 +156,10 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 const StyledHeader = styled(Header)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: transparent;
-  align-items: end;
   border: 1px solid black;
 `;
 const StyledSider = styled(Sider)`

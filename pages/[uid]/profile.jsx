@@ -4,6 +4,7 @@ import {
   getUserProfile,
   getWishlistsForUser,
   addWishlist,
+  addItemToWishlist,
 } from "utils/firebase";
 import { useRouter } from "next/router";
 import { ProfileLayout } from "components/profile";
@@ -34,19 +35,20 @@ export default function Profile() {
     });
   }
 
+  function handleItemAdded(wishlistId, item) {
+    return new Promise((resolve, reject) => {
+      addItemToWishlist(wishlistId, item)
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
+  }
+
   return (
     <ProfileLayout
       user={user}
       wishlists={wishlists}
       handleWishlistAdded={handleWishlistAdded}
+      handleItemAdded={handleItemAdded}
     />
   );
 }
-
-const Container = styled.div`
-  margin: 3em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;

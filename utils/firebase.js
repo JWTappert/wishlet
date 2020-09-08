@@ -134,6 +134,20 @@ function getWishlistsForUser(uid) {
   });
 }
 
+function addItemToWishlist(wishlistId, item) {
+  return new Promise((resolve, reject) => {
+    app
+      .firestore()
+      .collection("wishlists")
+      .doc(wishlistId)
+      .update({
+        items: app.firestore.FieldValue.arrayUnion(item),
+      })
+      .then(() => resolve())
+      .catch((error) => reject(error));
+  });
+}
+
 const FirebaseContext = createContext(null);
 const UserContext = createContext({ loggedIn: false, email: "" });
 
@@ -147,4 +161,5 @@ export {
   getUserProfile,
   addWishlist,
   getWishlistsForUser,
+  addItemToWishlist,
 };
