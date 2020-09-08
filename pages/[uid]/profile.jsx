@@ -25,7 +25,7 @@ export default function Profile() {
     getWishlistsForUser(uid)
       .then((wishlists) => setWishlists(wishlists))
       .catch((error) => console.error(error));
-  }, [wishlists]);
+  }, [uid, wishlists]);
 
   function handleWishlistAdded(name) {
     return new Promise((resolve, reject) => {
