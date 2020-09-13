@@ -24,7 +24,7 @@ export default function ProfileDetails() {
     <>
       {loading && (
         <Loading>
-          <Spin />
+          <Spin size="large" />
         </Loading>
       )}
       {profile && (

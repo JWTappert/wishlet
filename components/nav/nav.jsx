@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { Input, Menu, Modal, Layout } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { UserContext } from "contexts/user-context";
@@ -31,8 +32,10 @@ export default function Nav({}) {
           )}
           {user && (
             <SubMenu icon={<UserOutlined />} title="User">
-              <Menu.Item onClick={() => router.push(`/[${user.uid}]/profile`)}>
-                Profile
+              <Menu.Item>
+                <Link href="/[uid]/profile" as={`/${user.uid}/profile`}>
+                  <a>Profile</a>
+                </Link>
               </Menu.Item>
               <Menu.Item onClick={signOut}>Sign Out</Menu.Item>
             </SubMenu>

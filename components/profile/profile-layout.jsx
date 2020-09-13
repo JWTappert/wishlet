@@ -16,11 +16,7 @@ export default function ProfileLayout() {
         <Content>
           <Card style={{ height: "100%" }} bodyStyle={{ height: "100%" }}>
             <ProfileDetails />
-            {/*<ProfileList*/}
-            {/*  wishlists={wishlists}*/}
-            {/*  handleWishlistAdded={handleWishlistAdded}*/}
-            {/*  handleItemAdded={handleItemAdded}*/}
-            {/*/>*/}
+            <ProfileList />
           </Card>
         </Content>
       </Layout>

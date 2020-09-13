@@ -6,7 +6,6 @@ const useProfile = (uid) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log({ firebase });
   const getProfile = (uid) => {
     if (!uid) return;
     firebase
@@ -18,7 +17,10 @@ const useProfile = (uid) => {
         if (snapshot.exists) {
           setProfile({ uid: snapshot.id, ...snapshot.data() });
           setLoading(false);
-        } else setProfile(null);
+        } else {
+          setProfile(null);
+          setLoading(false);
+        }
       })
       .catch((error) => {
         setError(error);
@@ -27,12 +29,9 @@ const useProfile = (uid) => {
   };
 
   useEffect(() => {
-    console.log("fetching...");
-
     setLoading(true);
     setError(null);
     setProfile(null);
-
     getProfile(uid);
   }, [uid]);
 
