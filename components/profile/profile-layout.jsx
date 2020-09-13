@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Layout, Typography } from "antd";
 import ProfileDetails from "./profile-details";
 import ProfileList from "./profile-lists";
@@ -6,12 +6,7 @@ import ProfileList from "./profile-lists";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-export default function ProfileLayout({
-  user,
-  wishlists,
-  handleWishlistAdded,
-  handleItemAdded,
-}) {
+export default function ProfileLayout() {
   return (
     <Layout style={{ height: "100%" }}>
       <Header style={{ background: "transparent" }}>
@@ -20,12 +15,12 @@ export default function ProfileLayout({
       <Layout>
         <Content>
           <Card style={{ height: "100%" }} bodyStyle={{ height: "100%" }}>
-            <ProfileDetails user={user} />
-            <ProfileList
-              wishlists={wishlists}
-              handleWishlistAdded={handleWishlistAdded}
-              handleItemAdded={handleItemAdded}
-            />
+            <ProfileDetails />
+            {/*<ProfileList*/}
+            {/*  wishlists={wishlists}*/}
+            {/*  handleWishlistAdded={handleWishlistAdded}*/}
+            {/*  handleItemAdded={handleItemAdded}*/}
+            {/*/>*/}
           </Card>
         </Content>
       </Layout>

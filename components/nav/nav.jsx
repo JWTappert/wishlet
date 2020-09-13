@@ -1,57 +1,61 @@
 import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import {Input, Menu, Modal, Layout} from "antd";
-import {PlusOutlined, UserOutlined} from "@ant-design/icons";
-import {signOut, UserContext} from "utils/firebase";
+import { Input, Menu, Modal, Layout } from "antd";
+import { PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { UserContext } from "contexts/user-context";
 const { Header } = Layout;
 
 export default function Nav({}) {
-  const user = useContext(UserContext)
+  const { user, signOut } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
-  const [listName, setListName] = useState('');
+  const [listName, setListName] = useState("");
   const router = useRouter();
   const { SubMenu } = Menu;
 
-  const requestSignOut = useCallback(() => {
-    signOut();
-    router.push('/');
-  }, []);
-
   return (
     <>
-    <Header>
-      <Logo onClick={() => router.push('/')} />
-      <Menu theme={'dark'} mode="horizontal" style={{textAlign: 'right'}}>
-        <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>List</Menu.Item>
-        {!user.loggedIn && (
-          <Menu.Item icon={<UserOutlined />} onClick={() => router.push('/signin')}>Sign In</Menu.Item>
-        )}
-        {user.loggedIn &&
-          (<SubMenu icon={<UserOutlined />} title="User">
-            <Menu.Item onClick={() => router.push(`/${user.uid}/profile`)}>Profile</Menu.Item>
-            <Menu.Item onClick={requestSignOut}>Sign Out</Menu.Item>
-          </SubMenu>
-        )}
-      </Menu>
+      <Header>
+        <Logo onClick={() => router.push("/")} />
+        <Menu theme={"dark"} mode="horizontal" style={{ textAlign: "right" }}>
+          <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>
+            List
+          </Menu.Item>
+          {!user && (
+            <Menu.Item
+              icon={<UserOutlined />}
+              onClick={() => router.push("/signin")}
+            >
+              Sign In
+            </Menu.Item>
+          )}
+          {user && (
+            <SubMenu icon={<UserOutlined />} title="User">
+              <Menu.Item onClick={() => router.push(`/[${user.uid}]/profile`)}>
+                Profile
+              </Menu.Item>
+              <Menu.Item onClick={signOut}>Sign Out</Menu.Item>
+            </SubMenu>
+          )}
+        </Menu>
       </Header>
-        <Modal
-          title="Create a wishlist"
-          visible={showModal}
-          onOk={() => console.log(listName)}
-          onCancel={() => setShowModal(false)}
-          okText="Create"
-        >
-          <Input
-            type="text"
-            placeholder="Wishlist Name"
-            value={listName}
-            onChange={({target}) => setListName(target.value)}
-            onPressEnter={({target}) => onFinish(target.value)}
-          />
-        </Modal>
-      </>
-  )
+      <Modal
+        title="Create a wishlist"
+        visible={showModal}
+        onOk={() => console.log(listName)}
+        onCancel={() => setShowModal(false)}
+        okText="Create"
+      >
+        <Input
+          type="text"
+          placeholder="Wishlist Name"
+          value={listName}
+          onChange={({ target }) => setListName(target.value)}
+          onPressEnter={({ target }) => onFinish(target.value)}
+        />
+      </Modal>
+    </>
+  );
 }
 
 const Logo = styled.div`
