@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import {
   Tabs,
@@ -10,54 +10,48 @@ import {
   Typography,
   Form,
 } from "antd";
+import { WishlistsContext } from "contexts/wishlists-context";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
-export default function ProfileList({
-  wishlists,
-  handleWishlistAdded,
-  handleItemAdded,
-}) {
-  const [addListVisible, setAddListVisible] = useState(false);
-  const [addItemVisible, setAddItemVisible] = useState(false);
-  const [wishlistName, setWishlistName] = useState("");
-  const [selectedList, setSelectedList] = useState();
-  const [item, setItem] = useState();
+export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
+  const { wishlists, addWishlist } = useContext(WishlistsContext);
+  const [selectedList, setSelectedList] = useState(null);
 
   function handleCancel(flag) {
-    if (!flag) {
-      setWishlistName("");
-      setAddListVisible(false);
-    } else {
-      setWishlistName("");
-      setAddItemVisible(false);
-    }
+    // if (!flag) {
+    //   setWishlistName("");
+    //   setAddListVisible(false);
+    // } else {
+    //   setWishlistName("");
+    //   setAddItemVisible(false);
+    // }
   }
 
   function handleAddListClick(flag) {
-    setAddListVisible(true);
+    // setAddListVisible(true);
   }
 
   function handleAddListItem() {
-    setAddItemVisible(true);
+    // setAddItemVisible(true);
   }
 
   function handleListAddedOk() {
-    if (wishlistName) {
-      handleWishlistAdded(wishlistName)
-        .then(() => setAddListVisible(false))
-        .catch((error) => console.error(error));
-    }
+    // if (wishlistName) {
+    //   handleWishlistAdded(wishlistName)
+    //     .then(() => setAddListVisible(false))
+    //     .catch((error) => console.error(error));
+    // }
   }
 
   function handleItemAddedOk() {
-    if (selectedList.id && item.name && item.link) {
-      handleItemAdded(selectedList.id, item)
-        .then(() => setAddItemVisible(false))
-        .catch((error) => console.error(error));
-    }
+    // if (selectedList.id && item.name && item.link) {
+    //   handleItemAdded(selectedList.id, item)
+    //     .then(() => setAddItemVisible(false))
+    //     .catch((error) => console.error(error));
+    // }
   }
 
   return (
@@ -104,20 +98,23 @@ export default function ProfileList({
       </StyledTabs>
       <Modal
         title="Add a List"
-        visible={addListVisible}
+        // visible={addListVisible}
+        visible={false}
         onCancel={() => handleCancel(0)}
         onOk={() => handleListAddedOk()}
         bodyStyle={{ padding: "48px 24px 24px 24px" }}
       >
         <Input
           placeholder="Wishlist Name"
-          value={wishlistName}
-          onChange={(e) => setWishlistName(e.target.value)}
+          // value={wishlistName}
+          value={""}
+          // onChange={(e) => setWishlistName(e.target.value)}
         />
       </Modal>
       <Modal
         title="Add an Item"
-        visible={addItemVisible}
+        // visible={addItemVisible}
+        visible={false}
         onCancel={() => handleCancel(1)}
         onOk={() => handleItemAddedOk()}
         bodyStyle={{ padding: "48px 24px 24px 24px" }}
@@ -159,9 +156,11 @@ const StyledHeader = styled(Header)`
   justify-content: space-between;
   align-items: center;
   background: transparent;
-  border: 1px solid black;
+  border-top: 1px solid gainsboro;
+  border-right: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
 `;
 const StyledSider = styled(Sider)`
-  border: 1px solid black;
+  border: 1px solid gainsboro;
   background: transparent;
 `;
