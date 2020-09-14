@@ -61,11 +61,11 @@ export const WishlistsProvider = ({ children }) => {
               .get()
               .then((snapshot) => {
                 snapshot.forEach((doc) => wishlists.push({ ...doc.data() }));
+                dispatch({
+                  type: ADD_WISHLIST,
+                  payload: { wishlists: wishlists },
+                });
               });
-            dispatch({
-              type: ADD_WISHLIST,
-              payload: { wishlists: wishlists },
-            });
           })
           .catch((error) => dispatch({ type: ERROR, payload: { error } }));
       }
