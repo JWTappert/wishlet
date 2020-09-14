@@ -17,7 +17,8 @@ const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
-  const { wishlists, addWishlist } = useContext(WishlistsContext);
+  const { state, addWishlist } = useContext(WishlistsContext);
+  const { loading, wishlists, error } = state;
   const [selectedList, setSelectedList] = useState(null);
 
   function handleCancel(flag) {
@@ -62,11 +63,8 @@ export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
             <StyledSider>
               <Menu>
                 {wishlists &&
-                  wishlists.map((list) => (
-                    <Menu.Item
-                      key={list.id}
-                      onClick={() => setSelectedList(list)}
-                    >
+                  wishlists.map((list, i) => (
+                    <Menu.Item key={i} onClick={() => setSelectedList(list)}>
                       {list.name}
                     </Menu.Item>
                   ))}
