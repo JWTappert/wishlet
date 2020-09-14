@@ -5,15 +5,12 @@ import ProfileList from "./profile-lists";
 import { WishlistsProvider } from "../../contexts/wishlists-context";
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
 
 export default function ProfileLayout() {
   return (
     <WishlistsProvider>
       <Layout style={{ height: "100%" }}>
-        <Header style={{ background: "transparent" }}>
-          <Title>Profile</Title>
-        </Header>
+        {/*<Header style={{ background: "transparent" }}></Header>*/}
         <Layout>
           <Content>
             <Card style={{ height: "100%" }} bodyStyle={{ height: "100%" }}>
