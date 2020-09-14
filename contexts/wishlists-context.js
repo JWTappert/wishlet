@@ -14,6 +14,7 @@ const GET_WISHLISTS = "GET_WISHLISTS";
 const ADD_WISHLIST = "ADD_WISHLIST";
 const REMOVE_WISHLIST = "REMOVE_WISHLIST";
 const ADD_WISHLIST_ITEM = "REMOVE_WISHLIST_ITEM";
+
 const initialState = {
   loading: true,
   wishlists: [],
@@ -43,17 +44,29 @@ export const WishlistsProvider = ({ children }) => {
   }, [uid]);
 
   const addWishlist = useCallback(
-    ({ name, uid }) => {
+    (name, uid) => {
       if (name && uid) {
         dispatch({ type: LOADING });
         const newList = { uid, name, items: [] };
+        const wishlists = [];
         firebase
           .firestore()
           .collection("wishlists")
           .add(newList)
-          .then(() =>
-            dispatch({ type: ADD_WISHLIST, payload: { list: newList } })
-          )
+          .then((docRef) => {
+            firebase
+              .firestore()
+              .collection("wishlists")
+              .where("uid", "==", uid)
+              .get()
+              .then((snapshot) => {
+                snapshot.forEach((doc) => wishlists.push({ ...doc.data() }));
+              });
+            dispatch({
+              type: ADD_WISHLIST,
+              payload: { wishlists: wishlists },
+            });
+          })
           .catch((error) => dispatch({ type: ERROR, payload: { error } }));
       }
     },
@@ -78,7 +91,7 @@ const reducer = (state = [], action) => {
   if (action.type === ADD_WISHLIST) {
     return {
       loading: false,
-      wishlists: [...state, action.payload.list],
+      wishlists: action.payload.wishlists,
       error: null,
     };
   }

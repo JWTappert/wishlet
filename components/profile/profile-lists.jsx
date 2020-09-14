@@ -1,58 +1,21 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import {
-  Tabs,
-  Layout,
-  Menu,
-  Button,
-  Modal,
-  Input,
-  Typography,
-  Form,
-} from "antd";
+import { Tabs, Layout, Menu, Button, Typography } from "antd";
 import { WishlistsContext } from "contexts/wishlists-context";
+import { AddWishlistModal } from "../wishlist";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
-  const { state, addWishlist } = useContext(WishlistsContext);
+  const { state } = useContext(WishlistsContext);
   const { loading, wishlists, error } = state;
+  const [showAddWishlist, setShowAddWishlist] = useState(false);
   const [selectedList, setSelectedList] = useState(null);
 
-  function handleCancel(flag) {
-    // if (!flag) {
-    //   setWishlistName("");
-    //   setAddListVisible(false);
-    // } else {
-    //   setWishlistName("");
-    //   setAddItemVisible(false);
-    // }
-  }
-
-  function handleAddListClick(flag) {
-    // setAddListVisible(true);
-  }
-
-  function handleAddListItem() {
-    // setAddItemVisible(true);
-  }
-
-  function handleListAddedOk() {
-    // if (wishlistName) {
-    //   handleWishlistAdded(wishlistName)
-    //     .then(() => setAddListVisible(false))
-    //     .catch((error) => console.error(error));
-    // }
-  }
-
-  function handleItemAddedOk() {
-    // if (selectedList.id && item.name && item.link) {
-    //   handleItemAdded(selectedList.id, item)
-    //     .then(() => setAddItemVisible(false))
-    //     .catch((error) => console.error(error));
-    // }
+  function handleCancelAddWishlist() {
+    setShowAddWishlist(false);
   }
 
   return (
@@ -72,21 +35,23 @@ export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
             </StyledSider>
             <Content>
               <StyledHeader>
-                {selectedList && (
-                  <>
-                    <Title>{selectedList.name}</Title>
-                    <Button onClick={handleAddListItem}>Add Item</Button>
-                  </>
-                )}
-                <Button onClick={handleAddListClick}>Add List</Button>
+                {/*{selectedList && (*/}
+                {/*  <>*/}
+                {/*    <Title>{selectedList.name}</Title>*/}
+                {/*    <Button onClick={handleAddListItem}>Add Item</Button>*/}
+                {/*  </>*/}
+                {/*)}*/}
+                <Button onClick={() => setShowAddWishlist(true)}>
+                  Add List
+                </Button>
               </StyledHeader>
-              {selectedList &&
-                selectedList.items.map((item) => (
-                  <React.Fragment>
-                    <Title>{item.name}</Title>
-                    <Text>{item.link}</Text>
-                  </React.Fragment>
-                ))}
+              {/*{selectedList &&*/}
+              {/*  selectedList.items.map((item) => (*/}
+              {/*    <React.Fragment>*/}
+              {/*      <Title>{item.name}</Title>*/}
+              {/*      <Text>{item.link}</Text>*/}
+              {/*    </React.Fragment>*/}
+              {/*  ))}*/}
             </Content>
           </Layout>
         </TabPane>
@@ -94,52 +59,10 @@ export default function ProfileList({ handleWishlistAdded, handleItemAdded }) {
           Content of Tab Pane 2
         </TabPane>
       </StyledTabs>
-      <Modal
-        title="Add a List"
-        // visible={addListVisible}
-        visible={false}
-        onCancel={() => handleCancel(0)}
-        onOk={() => handleListAddedOk()}
-        bodyStyle={{ padding: "48px 24px 24px 24px" }}
-      >
-        <Input
-          placeholder="Wishlist Name"
-          // value={wishlistName}
-          value={""}
-          // onChange={(e) => setWishlistName(e.target.value)}
-        />
-      </Modal>
-      <Modal
-        title="Add an Item"
-        // visible={addItemVisible}
-        visible={false}
-        onCancel={() => handleCancel(1)}
-        onOk={() => handleItemAddedOk()}
-        bodyStyle={{ padding: "48px 24px 24px 24px" }}
-      >
-        <Form>
-          <Form.Item label="Name">
-            <Input
-              type="text"
-              onChange={(e) =>
-                setItem((prevState) => {
-                  return { ...prevState, name: e.target.value };
-                })
-              }
-            />
-          </Form.Item>
-          <Form.Item label="Link">
-            <Input
-              type="text"
-              onChange={(e) =>
-                setItem((prevState) => {
-                  return { ...prevState, link: e.target.value };
-                })
-              }
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
+      <AddWishlistModal
+        addListVisible={showAddWishlist}
+        cancelClick={handleCancelAddWishlist}
+      />
     </>
   );
 }
