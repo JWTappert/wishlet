@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from "react";
 import { useRouter } from "next/router";
-import firebase from "utils/firebase";
+import { addList, getWishlistsForUser } from "utils/firebase";
 
 export const WishlistsContext = createContext([]);
 const LOADING = "LOADING";
@@ -29,14 +29,8 @@ export const WishlistsProvider = ({ children }) => {
   useEffect(() => {
     if (uid) {
       dispatch({ type: LOADING });
-      firebase
-        .firestore()
-        .collection("wishlists")
-        .where("uid", "==", uid)
-        .get()
-        .then((querySnapshot) => {
-          const wishlists = [];
-          querySnapshot.forEach((doc) => wishlists.push({ ...doc.data() }));
+      getWishlistsForUser(uid)
+        .then((wishlists) => {
           dispatch({ type: GET_WISHLISTS, payload: { wishlists } });
         })
         .catch((error) => dispatch({ type: ERROR, payload: { error } }));
@@ -47,25 +41,13 @@ export const WishlistsProvider = ({ children }) => {
     (name, uid) => {
       if (name && uid) {
         dispatch({ type: LOADING });
-        const newList = { uid, name, items: [] };
-        const wishlists = [];
-        firebase
-          .firestore()
-          .collection("wishlists")
-          .add(newList)
+        addList(uid, name)
           .then((docRef) => {
-            firebase
-              .firestore()
-              .collection("wishlists")
-              .where("uid", "==", uid)
-              .get()
-              .then((snapshot) => {
-                snapshot.forEach((doc) => wishlists.push({ ...doc.data() }));
-                dispatch({
-                  type: ADD_WISHLIST,
-                  payload: { wishlists: wishlists },
-                });
-              });
+            getWishlistsForUser(uid)
+              .then((wishlists) => {
+                dispatch({ type: GET_WISHLISTS, payload: { wishlists } });
+              })
+              .catch((error) => dispatch({ type: ERROR, payload: { error } }));
           })
           .catch((error) => dispatch({ type: ERROR, payload: { error } }));
       }
