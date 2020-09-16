@@ -133,7 +133,7 @@ function getWishlistsForUser(uid) {
       .get()
       .then((querySnapshot) => {
         const wishlists = [];
-        querySnapshot.forEach((doc) => wishlists.push({ ...doc.data() }));
+        querySnapshot.forEach((doc) => wishlists.push({ id: doc.id, ...doc.data() }));
         resolve(wishlists);
       })
       .catch((error) => reject(error));

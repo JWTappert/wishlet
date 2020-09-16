@@ -1,11 +1,9 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-const useUid = () => {
+const useQueryParam = (key) => {
   const router = useRouter();
-  const { uid } = router.query;
-
-  return uid;
+  return router.query[key];
 };
 
-export default useUid;
+export default useQueryParam;
