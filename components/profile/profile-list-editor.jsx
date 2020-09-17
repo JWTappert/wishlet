@@ -20,6 +20,11 @@ export default function ProfileListEditor({ list }) {
           }}
           renderItem={item => (
             <List.Item
+              style={{
+                background: '#fff',
+                borderRight: '1px solid gainsboro',
+                borderBottom: '1px solid gainsboro'
+              }}
               key={item.title}
               actions={[
                 <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
@@ -36,7 +41,7 @@ export default function ProfileListEditor({ list }) {
             >
               <List.Item.Meta
                 title={<a href={item.link}>{item.name}</a>}
-                description={"Description!"}
+                description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
               />
               {item.content}
             </List.Item>
