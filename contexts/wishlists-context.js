@@ -13,7 +13,6 @@ const ERROR = "ERROR";
 const GET_WISHLISTS = "GET_WISHLISTS";
 const ADD_WISHLIST = "ADD_WISHLIST";
 const REMOVE_WISHLIST = "REMOVE_WISHLIST";
-const ADD_WISHLIST_ITEM = "REMOVE_WISHLIST_ITEM";
 
 const initialState = {
   loading: true,
@@ -84,7 +83,7 @@ const reducer = (state = [], action) => {
       error: null,
     };
   }
-  if (action.type === LOADING) {
+  if (action.type === ERROR) {
     return {
       loading: false,
       wishlists: [],
