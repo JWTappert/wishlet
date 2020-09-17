@@ -1,44 +1,57 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import {Button, Layout, Typography } from "antd";
-import useQueryParam from "../../hooks/use-query-param";
-const { Header } = Layout;
-const { Title, Text } = Typography;
+import React from "react";
+import ProfileListHeader from "./profile-list-header";
+import {List, Space} from "antd";
+import {StarOutlined, LikeOutlined, MessageOutlined} from "@ant-design/icons";
 
 export default function ProfileListEditor({ list }) {
-
-  function handleAddListItem() {}
-  function setShowAddWishlist() {}
-
   return (
-    <>
-    <StyledHeader>
+    <React.Fragment>
+      <ProfileListHeader list={list} />
       {list && (
-        <>
-          <Title>{list.name}</Title>
-          <Button onClick={handleAddListItem}>Add Item</Button>
-        </>
+        <List
+          dataSource={list.items}
+          itemLayout="vertical"
+          size="large"
+          pagination={{
+            onChange: page => {
+              console.log(page);
+            },
+            pageSize: 3,
+          }}
+          renderItem={item => (
+            <List.Item
+              key={item.title}
+              actions={[
+                <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+              ]}
+              extra={
+                <img
+                  width={272}
+                  alt="logo"
+                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                />
+              }
+            >
+              <List.Item.Meta
+                title={<a href={item.link}>{item.name}</a>}
+                description={"Description!"}
+              />
+              {item.content}
+            </List.Item>
+          )}
+        />
       )}
-      <Button onClick={() => setShowAddWishlist(true)}>
-        Add List
-      </Button>
-    </StyledHeader>
-      {list &&
-        list.items.map((item) => (
-          <React.Fragment>
-            <Title>{item.name}</Title>
-            <Text>{item.link}</Text>
-          </React.Fragment>
-        ))}
-    </>  )
+    </React.Fragment>
+  )
 }
 
-const StyledHeader = styled(Header)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: transparent;
-  border-top: 1px solid gainsboro;
-  border-right: 1px solid gainsboro;
-  border-bottom: 1px solid gainsboro;
-`;
+const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
+
+
