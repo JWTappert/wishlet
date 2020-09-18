@@ -1,46 +1,26 @@
 import React, {useContext, useState} from "react";
 import { Button, Form, Input, Modal } from "antd";
-import {WishlistsContext} from "contexts/wishlists-context";
+import {WishlistContext} from "contexts/wishlist-context";
 
 export default function AddWishlistItemModal({ wishlistId, open, toggleOpen }) {
-  const { addItemToWishlist } = useContext(WishlistsContext);
+  const {state, addItem } = useContext(WishlistContext);
+  const { loading, error } = state;
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
 
   function handleCancel() {
     form.resetFields();
+    toggleOpen(!open);
   }
 
   function handleSubmit() {
-    setLoading(true);
     form.validateFields()
       .then(values => {
-        addItemToWishlist(wishlistId, { name: values.name, link: values.link })
-          .then(() => {
-            setLoading(false)
-            toggleOpen(!open);
-          })
-          .catch(error => {
-            setLoading(false);
-            console.error(error)
-          });
+        addItem(wishlistId, { name: values.name, link: values.link });
+        form.resetFields();
+        toggleOpen(!open);
       })
       .catch(errorInfo => {
-        setLoading(false);
         console.error(errorInfo);
-        /*
-        errorInfo:
-          {
-            values: {
-              username: 'username',
-              password: 'password',
-            },
-            errorFields: [
-              { password: ['username'], errors: ['Please input your Password!'] },
-            ],
-            outOfDate: false,
-          }
-        */
       });
   }
 
@@ -54,7 +34,7 @@ export default function AddWishlistItemModal({ wishlistId, open, toggleOpen }) {
         <Button key="cancel" onClick={handleCancel}>
           Cancel
         </Button>,
-        <Button key="submit" type="primary" loading={loading} onClick={handleSubmit}>
+        <Button key="submit" type="primary" onClick={handleSubmit}>
           Submit
         </Button>,
       ]}

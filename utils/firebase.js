@@ -49,7 +49,9 @@ function signUp(email, password) {
       .createUserWithEmailAndPassword(email, password)
       .then(({ user }) => {
         if (user) {
-          firebase.firestore.collection("users").add({
+          firebase.firestore
+            .collection("users")
+            .add({
             email: user.email,
             first: "",
             last: "",
@@ -112,15 +114,26 @@ function addList(uid, name) {
 
 function addItemToWishlist(wishlistId, item) {
   return new Promise((resolve, reject) => {
-    firebase
-      .firestore()
-      .collection("wishlists")
-      .doc(wishlistId)
-      .update({
-        items: firebase.firestore.FieldValue.arrayUnion(item),
-      })
-      .then(() => resolve())
-      .catch((error) => reject(error));
+      const itemId = firebase.firestore().collection("temp").doc().id;
+      firebase
+        .firestore()
+        .collection("wishlists")
+        .doc(wishlistId)
+        .update({
+          items: firebase.firestore.FieldValue.arrayUnion({id: itemId, ...item}),
+        })
+        .then(() => resolve())
+        .catch((error) => reject(error));
+  });
+}
+
+function removeItemFromWishlist(wishlistId, itemId) {
+  return new Promise((resolve, reject) => {
+      if (wishlistId && itemId) {
+          resolve({success: true });
+      } else {
+          reject({success: true });
+      }
   });
 }
 
@@ -148,4 +161,5 @@ export {
   addList,
   getWishlistsForUser,
   addItemToWishlist,
+    removeItemFromWishlist
 };

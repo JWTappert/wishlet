@@ -1,74 +1,85 @@
 import React, {
   createContext,
-  useEffect,
   useCallback,
   useReducer,
 } from "react";
-import useQueryParam from "hooks/use-query-param";
+import {addItemToWishlist, removeItemFromWishlist } from "utils/firebase";
 
 export const WishlistContext = createContext([]);
 const LOADING = "LOADING";
 const ERROR = "ERROR";
-const GET_WISHLIST = "GET_WISHLIST";
-const ADD_ITEM = "ADD_ITEM";
+const ITEM_ADDED = "ADD_ITEM";
 const REMOVE_ITEM = "REMOVE_ITEM";
 
 const initialState = {
-  loading: true,
-  wishlist: {},
+  loading: null,
   error: null,
 };
 
 export const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const addItemToWishlist = useCallback(
+  const addItem = useCallback(
     (wishlistId, itemToAdd) => {
       if (wishlistId && itemToAdd) {
         dispatch({ type: LOADING });
-        addItemToWishlist(wishlistId, itemToAdd)
-          .then((docRef) => {
-            dispatch({ type: GET_WISHLIST });
-          })
-          .catch((error) => dispatch({ type: ERROR, payload: { error } }));
+        addItemToWishlist(wishlistId, itemToAdd).then(() => {
+          dispatch({ type: ITEM_ADDED });
+        }).catch(error => {
+          dispatch({ type: ERROR, payload: { error }})
+        });
+      } else {
+        dispatch({ type: ERROR, payload: { error: "You must provide a wishlist id and an item to add" }});
+      }
+    },
+    [dispatch]
+  );
+
+  const removeItem = useCallback(
+    (wishlistId, itemId) => {
+      if (wishlistId && itemId) {
+        dispatch({ type: LOADING });
+        removeItemFromWishlist(wishlistId, itemId).then(() => {
+          dispatch({ type: ITEM_ADDED });
+        }).catch(error => {
+          dispatch({ type: ERROR, payload: { error }})
+        });
+      } else {
+        dispatch({ type: ERROR })
       }
     },
     [dispatch]
   );
 
   return (
-    <WishlistContext.Provider value={{ state, addItemToWishlist }}>
+    <WishlistContext.Provider value={{ state, addItem }}>
       {children}
     </WishlistContext.Provider>
   );
 };
 
 const reducer = (state = {}, action) => {
-  if (action.type === GET_WISHLIST) {
+  if (action.type === ITEM_ADDED) {
     return {
       loading: false,
-      wishlist: action.payload.wishlist,
       error: null,
     };
   }
-  if (action.type === ADD_ITEM) {
+  if (action.type === REMOVE_ITEM) {
     return {
       loading: false,
-      wishlist: action.payload.wishlist,
       error: null,
-    };
+    }
   }
   if (action.type === LOADING) {
     return {
       loading: true,
-      wishlists: {},
       error: null,
     };
   }
   if (action.type === ERROR) {
     return {
       loading: false,
-      wishlists: {},
       error: action.payload.error,
     };
   }
