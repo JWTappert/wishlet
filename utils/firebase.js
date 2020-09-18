@@ -146,12 +146,25 @@ function getWishlistsForUser(uid) {
       .get()
       .then((querySnapshot) => {
         const wishlists = [];
-        querySnapshot.forEach((doc) => wishlists.push({ id: doc.id, ...doc.data() }));
+        querySnapshot.forEach((doc) => wishlists.push({id: doc.id, ...doc.data()}));
         resolve(wishlists);
       })
       .catch((error) => reject(error));
   });
 }
+
+function listenToWishlistChanges(wishlistId, onNext, onError) {
+  if (!wishlistId) return;
+    firebase
+    .firestore()
+    .collection("wishlists")
+    .doc(wishlistId)
+    .onSnapshot(
+      (snapshot) => onNext(snapshot.data()),
+    (error) => onError(error)
+    );
+}
+
 export {
   onAuthStateChange,
   signIn,
@@ -160,6 +173,7 @@ export {
   getUserProfile,
   addList,
   getWishlistsForUser,
+  listenToWishlistChanges,
   addItemToWishlist,
-    removeItemFromWishlist
+  removeItemFromWishlist
 };

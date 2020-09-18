@@ -2,22 +2,49 @@ import React, {
   createContext,
   useCallback,
   useReducer,
+  useEffect,
+  useState
 } from "react";
-import {addItemToWishlist, removeItemFromWishlist } from "utils/firebase";
+import {addItemToWishlist, listenToWishlistChanges, removeItemFromWishlist} from "utils/firebase";
 
 export const WishlistContext = createContext([]);
 const LOADING = "LOADING";
 const ERROR = "ERROR";
 const ITEM_ADDED = "ADD_ITEM";
 const REMOVE_ITEM = "REMOVE_ITEM";
+const UPDATE = "UPDATE";
 
 const initialState = {
+  wishlist: {},
   loading: null,
   error: null,
 };
 
 export const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [wishlistId, setWishlistId] = useState(null);
+
+  useEffect(() => {
+    let unsubscribe = () => {};
+    if (wishlistId) {
+      unsubscribe = listenToWishlistChanges(wishlistId, onNext, onError)
+    }
+    return () => {
+      unsubscribe();
+    }
+  }, [wishlistId]);
+
+  const getWishlist = useCallback((id) => {
+    setWishlistId(id);
+  }, []);
+
+  const onNext = useCallback((wishlist) => {
+    dispatch({ type: UPDATE, payload: { wishlist }});
+  }, [dispatch]);
+
+  const onError = useCallback((error) => {
+    dispatch({ type: ERROR, payload: { error }});
+  }, [dispatch]);
 
   const addItem = useCallback(
     (wishlistId, itemToAdd) => {
@@ -52,33 +79,44 @@ export const WishlistProvider = ({ children }) => {
   );
 
   return (
-    <WishlistContext.Provider value={{ state, addItem }}>
+    <WishlistContext.Provider value={{ state, getWishlist, addItem }}>
       {children}
     </WishlistContext.Provider>
   );
 };
 
 const reducer = (state = {}, action) => {
+  if (action.type === UPDATE) {
+    return {
+      wishlist: action.payload.wishlist,
+      loading: false,
+      error: null,
+    };
+  }
   if (action.type === ITEM_ADDED) {
     return {
+      wishlist: null,
       loading: false,
       error: null,
     };
   }
   if (action.type === REMOVE_ITEM) {
     return {
+      wishlist: null,
       loading: false,
       error: null,
     }
   }
   if (action.type === LOADING) {
     return {
+      wishlist: {},
       loading: true,
       error: null,
     };
   }
   if (action.type === ERROR) {
     return {
+      wishlist: {},
       loading: false,
       error: action.payload.error,
     };
