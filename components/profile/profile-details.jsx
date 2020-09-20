@@ -69,4 +69,5 @@ const Loading = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 300px;
+  padding: 5em;
 `;

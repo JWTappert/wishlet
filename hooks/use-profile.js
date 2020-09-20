@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import firebase from "utils/firebase";
+import {firebase} from "utils/firebase";
 
 const useProfile = (uid) => {
   const [profile, setProfile] = useState(null);

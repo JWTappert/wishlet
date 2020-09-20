@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState
 } from "react";
-import {addItemToWishlist, listenToWishlistChanges, removeItemFromWishlist} from "utils/firebase";
+import {addItemToWishlist, listenToWishlistChanges, removeItemFromWishlist} from "utils/firebase/firestore";
 
 export const WishlistContext = createContext([]);
 const LOADING = "LOADING";

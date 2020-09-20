@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from "react";
 import { useRouter } from "next/router";
-import { addList, getWishlistsForUser } from "utils/firebase";
+import { addList, getWishlistsForUser } from "utils/firebase/firestore";
 
 export const WishlistsContext = createContext([]);
 const LOADING = "LOADING";

@@ -1,13 +1,11 @@
-import firebase from "../firebase";
-import {mapUserData, setUserCookie} from "../../components/auth";
-const auth = firebase.auth();
-const firestore = firebase.firestore();
+import {auth,firestore} from "./index";
+import {mapUserData, setUserCookie} from "components/auth";
 const users = "users";
 
 const createUserProfileDocument = async (user, additionalData) => {
   if (!user) return;
   // check if this user exists before creating a new one
-  const userRef = firestore.doc(`users/${user.uid}`);
+  const userRef = firestore.doc(`${users}/${user.uid}`);
   const userSnapshot = await userRef.get();
   if (!userSnapshot.exists) {
     const { displayName, email, photoURL } = user;
@@ -25,7 +23,7 @@ const createUserProfileDocument = async (user, additionalData) => {
       throw error;
     }
   }
-  return getUserProfile(user.uid);
+  return await getUserProfile(user.uid);
 }
 
 const signUp = async (email, password) => {
@@ -67,4 +65,19 @@ export {
   signOut,
   getUserProfile,
   createUserProfileDocument
+}
+
+class UserProfile {
+  uid;
+  displayName;
+  email;
+  first;
+  last;
+  photoURL;
+  location;
+  facebook;
+  instagram;
+  twitter;
+  youtube;
+  website;
 }
