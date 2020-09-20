@@ -18,85 +18,6 @@ if (typeof window !== "undefined" && !firebase.apps.length) {
 }
 export default firebase;
 
-function onAuthStateChange(callback) {
-  return firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      callback({ loggedIn: true, email: user.email, uid: user.uid });
-    } else {
-      callback({ loggedIn: false });
-    }
-  });
-}
-
-function signIn(email, password) {
-  return new Promise((resolve, reject) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        const userData = mapUserData(user);
-        setUserCookie(userData);
-        resolve();
-      })
-      .catch((error) => reject(error));
-  });
-}
-
-function signUp(email, password) {
-  return new Promise((resolve, reject) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        if (user) {
-          firebase.firestore
-            .collection("users")
-            .add({
-            email: user.email,
-            first: "",
-            last: "",
-            location: "",
-            occupation: "",
-            website: "",
-            facebook: "",
-            twitter: "",
-            youtube: "",
-            pinterest: "",
-            instagram: "",
-            followers: 0,
-            following: 0,
-          });
-        }
-        resolve();
-      })
-      .catch((error) => reject(error));
-  });
-}
-
-function signOut() {
-  firebase.auth().signOut();
-}
-
-function getUserProfile(uid) {
-  return new Promise((resolve, reject) => {
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          resolve({ uid: snapshot.id, ...snapshot.data() });
-        } else {
-          throw new Error("User does not exist");
-        }
-      })
-      .catch((error) => reject(error));
-  });
-}
-
-// updateUserProfile(uid, profile)
-
 function addList(uid, name) {
   return new Promise((resolve, reject) => {
     firebase
@@ -166,11 +87,6 @@ function listenToWishlistChanges(wishlistId, onNext, onError) {
 }
 
 export {
-  onAuthStateChange,
-  signIn,
-  signUp,
-  signOut,
-  getUserProfile,
   addList,
   getWishlistsForUser,
   listenToWishlistChanges,

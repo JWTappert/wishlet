@@ -1,18 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
-import firebase from "utils/firebase";
+import { auth, createUserProfileDocument, signIn, signOut, signUp } from "utils/firebase/auth";
 import { useRouter } from "next/router";
 
 export const UserContext = createContext();
-
-const mapUser = (user) => {
-  return {
-    email: user.email,
-    emailVerified: user.emailVerified,
-    metadata: user.metadata,
-    phoneNumber: user.phoneNumber,
-    uid: user.uid,
-  };
-};
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -21,70 +11,66 @@ export const UserProvider = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+    // this will be the case when other oAuth providers are used
+    const getOrCreateUser = async (incomingUser) => {
       try {
-        if (user) {
-          setUser(mapUser(user));
-        } else setUser(null);
-      } catch (error) {
+        const user = await createUserProfileDocument(incomingUser);
+        setUser(user);
+        setLoading(false);
+      } catch(error) {
         setError(error);
-      } finally {
         setLoading(false);
       }
+    }
+
+    const unsubscribe = auth.onAuthStateChanged(async (googleUser) => {
+      await getOrCreateUser(googleUser);
     });
+
     return () => unsubscribe();
   }, []);
 
-  const signIn = (email, password) => {
+  const handleSignIn = async (email, password) => {
     setLoading(true);
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        setLoading(false);
-        router.push("/");
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(error);
-      });
+    try {
+      await signIn(email, password);
+      setLoading(false);
+      router.push("/");
+    } catch(error) {
+      setError(error);
+      setLoading(false);
+    }
   };
 
-  const signOut = () => {
+  const handleSignOut = async () => {
     setLoading(true);
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        setLoading(false);
-        router.push("/");
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(error);
-      });
+    try {
+     await signOut();
+      setLoading(false);
+      router.push("/");
+    } catch(error) {
+      setLoading(false);
+      setError(error);
+    }
   };
 
-  const signUp = (email, password) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        setLoading(false);
-        router.push("/");
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(error);
-      });
+  const handleSignUp = async (email, password) => {
+    try {
+      await signUp(email, password);
+      setLoading(false);
+      router.push("/");
+    } catch(error) {
+      setLoading(false);
+      setError(error);
+    }
   };
 
   const value = {
     user,
     loading,
     error,
-    signIn,
-    signOut,
+    signIn: handleSignIn,
+    signOut: handleSignOut,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
