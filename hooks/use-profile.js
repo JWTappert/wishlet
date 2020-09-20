@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {firebase} from "utils/firebase";
+import {getUserProfile} from "utils/firebase/auth";
 
 const useProfile = (uid) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getProfile = (uid) => {
+  const getProfile = async (uid) => {
     if (!uid) return;
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setProfile({ uid: snapshot.id, ...snapshot.data() });
-          setLoading(false);
-        } else {
-          setProfile(null);
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  };
+    try {
+      const userProfileDocument = await getUserProfile(uid);
+      setProfile(userProfileDocument);
+      setLoading(false);
+    } catch(error) {
+      setError(error);
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     setLoading(true);
