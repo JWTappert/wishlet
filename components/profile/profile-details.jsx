@@ -12,10 +12,9 @@ export default function ProfileDetails() {
   const { uid } = router.query;
   const [profile, loading, error] = useProfile(uid);
   const {
-    avatar,
+    photoURL,
     email,
-    first,
-    last,
+    displayName,
     website,
     facebook,
     twitter,
@@ -28,12 +27,19 @@ export default function ProfileDetails() {
     <Container>
       <Row>
         <Col span={6}>
-          <Title level={4}>{`${first} ${last}`}</Title>
-          <Avatar
+          <Title level={4}>{displayName}</Title>
+          {photoURL && (
+            <Avatar
+              style={{ margin: "0 .5em" }}
+              size={100}
+              src={photoURL}
+            />
+          )}
+          {!photoURL && (<Avatar
             style={{ margin: "0 .5em" }}
             size={100}
             icon={<UserOutlined />}
-          />
+          />)}
         </Col>
         <Col span={18}>
           {profile && (

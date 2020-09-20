@@ -2,19 +2,18 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Input, Menu, Modal, Layout } from "antd";
+import { Avatar, Input, Menu, Modal, Layout } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { UserContext } from "contexts/user-context";
 const { Header } = Layout;
+const { SubMenu } = Menu;
 
 export default function Nav({}) {
   const { user, handleSignOut } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState("");
   const router = useRouter();
-  const { SubMenu } = Menu;
 
-  console.log({ user });
   return (
     <>
       <Header>
@@ -32,14 +31,18 @@ export default function Nav({}) {
             </Menu.Item>
           )}
           {user && (
-            <SubMenu icon={<UserOutlined />} title="User">
+            <StyledSubMenu
+              style={{ span: {margin: '0 5px'}}}
+              icon={user.photoURL ? <Avatar size="small" src={user.photoURL} /> : <UserOutlined />}
+              title={user.displayName ? user.displayName : 'User'}
+            >
               <Menu.Item>
                 <Link href="/[uid]/profile" as={`/${user.uid}/profile`}>
                   <a>Profile</a>
                 </Link>
               </Menu.Item>
               <Menu.Item onClick={handleSignOut}>Sign Out</Menu.Item>
-            </SubMenu>
+            </StyledSubMenu>
           )}
         </Menu>
       </Header>
@@ -61,6 +64,12 @@ export default function Nav({}) {
     </>
   );
 }
+
+const StyledSubMenu = styled(SubMenu)`
+  span {
+    margin: 0 5px;
+  }
+`;
 
 const Logo = styled.div`
   width: 120px;
