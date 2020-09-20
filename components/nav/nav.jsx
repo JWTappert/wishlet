@@ -8,12 +8,13 @@ import { UserContext } from "contexts/user-context";
 const { Header } = Layout;
 
 export default function Nav({}) {
-  const { user, signOut } = useContext(UserContext);
+  const { user, handleSignOut } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState("");
   const router = useRouter();
   const { SubMenu } = Menu;
 
+  console.log({ user });
   return (
     <>
       <Header>
@@ -37,7 +38,7 @@ export default function Nav({}) {
                   <a>Profile</a>
                 </Link>
               </Menu.Item>
-              <Menu.Item onClick={signOut}>Sign Out</Menu.Item>
+              <Menu.Item onClick={handleSignOut}>Sign Out</Menu.Item>
             </SubMenu>
           )}
         </Menu>

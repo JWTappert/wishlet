@@ -1,12 +1,14 @@
-import {auth,firestore} from "./index";
-import {mapUserData, setUserCookie} from "components/auth";
+import {firebase, auth,firestore} from "./index";
+import {getUserFromCredential, getUserFromGoogleOAuthResponse, setUserCookie} from "utils/user";
 const users = "users";
 
-const createUserProfileDocument = async (user, additionalData) => {
+const getOrCreateUserProfileDocument = async (user, additionalData) => {
+  // if there is no user return - this happens on "mount"
   if (!user) return;
-  // check if this user exists before creating a new one
+  // get a reference to this user's spot in the database
   const userRef = firestore.doc(`${users}/${user.uid}`);
   const userSnapshot = await userRef.get();
+  // if that reference doesn't exist, create a new user
   if (!userSnapshot.exists) {
     const { displayName, email, photoURL } = user;
     const createdAt = new Date();
@@ -23,25 +25,46 @@ const createUserProfileDocument = async (user, additionalData) => {
       throw error;
     }
   }
+  // in both cases return the user
   return await getUserProfile(user.uid);
 }
 
 const signUp = async (email, password) => {
   // TODO: allow user to pass in display name if they want to
-  const user = await auth.createUserWithEmailAndPassword(email, password);
-  return createUserProfileDocument(user);
-}
-
-const signIn = async (email, password) => {
   try {
-    const user = await auth.signInWithEmailAndPassword(email, password);
-    const userData = mapUserData(user);
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const userData = getUserFromCredential(userCredential);
     setUserCookie(userData);
   } catch(error) {
     console.error(error);
     throw error;
   }
 }
+
+const signIn = async (email, password) => {
+  try {
+    const user = await auth.signInWithEmailAndPassword(email, password);
+    const userData = getUserFromCredential(user);
+    setUserCookie(userData);
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+const signInWithGoogle = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('profile');
+  provider.addScope('email');
+  try {
+    const response = await auth.signInWithPopup(provider);
+    const userData = getUserFromGoogleOAuthResponse(response);
+    setUserCookie(userData);
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 const signOut = async () => {
   auth.signOut();
@@ -62,9 +85,10 @@ export {
   auth,
   signIn,
   signUp,
+  signInWithGoogle,
   signOut,
   getUserProfile,
-  createUserProfileDocument
+  getOrCreateUserProfileDocument
 }
 
 class UserProfile {

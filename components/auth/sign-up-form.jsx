@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Card, Form, Input, Button, Typography } from "antd";
-import { UserContext } from "../../contexts/user-context";
+import { UserContext } from "contexts/user-context";
+import GoogleAuthProvider from "./google-auth-provider";
 
 const layout = {
   labelCol: { span: 6 },
@@ -11,19 +12,26 @@ const tailLayout = {
 };
 
 export default function SignUpForm({}) {
-  const { loading, error, signIn, signUp } = useContext(UserContext);
+  const { loading, error, setError, handleSignIn, handleSignUp } = useContext(UserContext);
   const [form] = Form.useForm();
   const [isSignUp, setIsSignUp] = useState(false);
   const { Title, Text, Link } = Typography;
 
-  const handleSignIn = (values) => {
+  useEffect(() => {
+    const clearErrors = () => {
+      setError(null);
+    }
+    clearErrors();
+  }, []);
+
+  const onSignIn = (values) => {
     const { email, password } = values;
-    signIn(email, password);
+    handleSignIn(email, password);
   };
 
-  const handleRegister = (values) => {
+  const onSignUp = (values) => {
     const { email, password } = values;
-    signUp(email, password);
+    handleSignUp(email, password);
   };
 
   return (
@@ -33,7 +41,7 @@ export default function SignUpForm({}) {
         {...layout}
         name="register"
         form={form}
-        onFinish={isSignUp ? handleRegister : handleSignIn}
+        onFinish={isSignUp ? onSignUp : onSignIn}
         scrollToFirstError
       >
         <Form.Item
@@ -95,6 +103,9 @@ export default function SignUpForm({}) {
           <Button type="primary" htmlType="submit" loading={loading}>
             {isSignUp ? "Sign Up" : "Sign in"}
           </Button>
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <GoogleAuthProvider />
         </Form.Item>
       </Form>
     </Card>

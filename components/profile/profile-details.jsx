@@ -62,12 +62,13 @@ export default function ProfileDetails() {
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding: 1em 5em 2em 5em;
+`;
 
 const Loading = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  padding: 5em;
 `;
