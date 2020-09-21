@@ -14,16 +14,18 @@ const clientCredentials = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-let auth, firestore;
+let auth, firestore, storage;
 
 if (typeof window !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
   auth = firebase.auth();
   firestore = firebase.firestore();
+  storage = firebase.storage();
 }
 
 export {
   firebase,
   auth,
-  firestore
+  firestore,
+  storage
 }

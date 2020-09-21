@@ -5,7 +5,7 @@ import {
   signIn,
   signInWithGoogle,
   signOut,
-  signUp
+  signUp, updateUserProfile
 } from "utils/firebase/auth";
 import { useRouter } from "next/router";
 
@@ -93,7 +93,7 @@ export const UserProvider = ({ children }) => {
     handleSignIn,
     handleSignInWithGoogle,
     handleSignOut,
-    handleSignUp
+    handleSignUp,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

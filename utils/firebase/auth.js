@@ -81,6 +81,17 @@ const getUserProfile = async (uid) => {
   }
 }
 
+const updateUserProfile = async (uid, updates) => {
+  if (!uid) return null;
+  try {
+    const userDocumentRef = await firestore.collection(users).doc(uid);
+    await userDocumentRef.update(updates);
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export {
   auth,
   signIn,
@@ -88,6 +99,7 @@ export {
   signInWithGoogle,
   signOut,
   getUserProfile,
+  updateUserProfile,
   getOrCreateUserProfileDocument
 }
 
@@ -95,8 +107,6 @@ class UserProfile {
   uid;
   displayName;
   email;
-  first;
-  last;
   photoURL;
   location;
   facebook;
