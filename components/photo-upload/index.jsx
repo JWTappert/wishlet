@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import { uploadPhoto } from "utils/firebase/storage";
 import {Button, Upload, message} from "antd";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
+import useQueryParam from "hooks/use-query-param";
 
 const PhotoUpload = () => {
+  const uid = useQueryParam("uid");
   const [photoURL, setPhotoURL] = useState("https://lh3.googleusercontent.com/a-/AOh14Gh_YAskwKvHLMuETVwTC6B4DAU9w9CQBVfBiX5t");
   const [loading, setLoading] = useState(false)
 
@@ -18,25 +20,27 @@ const PhotoUpload = () => {
     }
   }
 
-  const handleChange = (info) => {
-    console.log({ info });
+  const handleChange = async (event) => {
+    console.log({ event });
+    // try {
+    //   const url = await uploadPhoto(uid, file);
+    //   console.log({ url });
+    // } catch(error) {
+    //   console.error(error);
+    // }
   }
 
   const uploadButton = (
-    <Button icon={loading ? <LoadingOutlined /> : <PlusOutlined />}>
-      Upload
-    </Button>
+    <input
+      type="file"
+      name="photoURL"
+      onChange={(event) => console.log(event)}
+    />
   )
   return (
     <div>
-      <Upload
-        name="photoURL"
-        beforeUpload={validateImage}
-        onChange={handleChange}
-      >
         {/*{photoURL ? <img src={photoURL} alt="avatar" style={{ width: '50%'}} /> : uploadButton}*/}
         {uploadButton}
-      </Upload>
     </div>
   );
 };

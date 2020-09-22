@@ -1,5 +1,17 @@
-import {firebase, storage} from "./index";
+import { firestore, storage } from "./index";
 
-const uploadPhoto = async () => {
-
+const uploadPhoto = async (uid, file) => {
+  if (!uid || !file) return null;
+  try {
+    const response = await storage.ref().child('user-profiles').child(uid).child(file.name).put(File(file))
+    console.log({ response });
+    return await response.ref.getDownloadURL();
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
 };
+
+export {
+  uploadPhoto
+}
