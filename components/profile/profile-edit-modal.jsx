@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, Avatar, Upload} from "antd";
-import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
+import { Modal, Form, Input } from "antd";
 import useQueryParam from "hooks/use-query-param";
 import {ProfileContext} from "contexts/profile-context";
 import PhotoUpload from "../photo-upload";
@@ -10,22 +9,19 @@ function ProfileEditModal({ showEdit, setEdit }) {
   const {
     state: { profile, loading },
     handleUpdateUserProfile,
-    handleUploadProfilePhoto
   } = useContext(ProfileContext);
+  const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/350x150');
   const [fields, setFields] = useState(mapProfileToFields(profile));
 
   useEffect(() => {
     setFields(mapProfileToFields(profile))
+    setPhotoURL(profile?.photoURL);
   }, [profile]);
 
   const onSubmit = () => {
     const updates = mapFieldsToProfile(fields);
     handleUpdateUserProfile(uid, updates);
     setEdit(!showEdit);
-  }
-
-  const onPhotoUpload = (event) => {
-    console.log({ event });
   }
 
   return (
@@ -38,8 +34,9 @@ function ProfileEditModal({ showEdit, setEdit }) {
       <EditProfileForm
         fields={fields}
         onChange={(newFields) => setFields(newFields)}
-        handleUploadProfilePhoto={onPhotoUpload}
         loading={loading}
+        photoUrl={photoURL}
+        setPhotoUrl={setPhotoURL}
       />
     </Modal>
   );
@@ -48,10 +45,10 @@ function ProfileEditModal({ showEdit, setEdit }) {
 
 export default ProfileEditModal;
 
-const EditProfileForm = ({ onChange, fields }) => {
+const EditProfileForm = ({ onChange, fields, photoUrl, setPhotoUrl }) => {
   return (
     <div>
-      <PhotoUpload />
+      <PhotoUpload url={photoUrl} setUrl={setPhotoUrl}  />
       <Form
         name="edit-profile"
         layout="vertical"
@@ -127,11 +124,14 @@ const mapProfileToFields = (profile) => {
   ];
 }
 
-const mapFieldsToProfile = (fields) => {
+const mapFieldsToProfile = (fields, photoUrl) => {
   const updates = {};
   const nonEmpty = fields.filter(field => field.value);
   nonEmpty.forEach(field => {
     updates[field.name[0]] = field.value;
   });
+  if (photoUrl) {
+    updates['photoURL'] = photoUrl;
+  }
   return updates;
 }
