@@ -7,12 +7,10 @@ const {Text} = Typography;
 
 export default function ProfileListHeader({ list, showAddWishlist, setShowAddWishlist }) {
   const [addItemOpen, setAddItemOpen] = useState(false);
-
-  console.log({ showAddWishlist });
   return (
     <StyledHeader>
         <>
-        {list && <Text>{list.name}</Text> }
+        <Text>{list ? list.name : 'Select a list'}</Text>
           <ActionsContainer>
             <Button onClick={() => setShowAddWishlist(!showAddWishlist)}>Add List</Button>
             {list && (
@@ -22,7 +20,7 @@ export default function ProfileListHeader({ list, showAddWishlist, setShowAddWis
                 </>
               )}
           </ActionsContainer>
-          <AddWishlistItemModal wishlistId={list.id} open={addItemOpen} toggleOpen={setAddItemOpen} />
+          {list && <AddWishlistItemModal wishlistId={list.id} open={addItemOpen} toggleOpen={setAddItemOpen} />}
         </>
     </StyledHeader>
   )

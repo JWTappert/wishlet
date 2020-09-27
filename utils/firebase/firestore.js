@@ -55,7 +55,7 @@ function getWishlistsForUser(uid) {
 
 function listenToWishlistChanges(wishlistId, onNext, onError) {
   if (!wishlistId) return;
-  firestore
+  return firestore
     .collection("wishlists")
     .doc(wishlistId)
     .onSnapshot(
