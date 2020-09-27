@@ -5,26 +5,31 @@ import {AddWishlistItemModal} from "components/wishlist";
 const {Header} = Layout;
 const {Text} = Typography;
 
-export default function ProfileListHeader({ list }) {
+export default function ProfileListHeader({ list, showAddWishlist, setShowAddWishlist }) {
   const [addItemOpen, setAddItemOpen] = useState(false);
 
+  console.log({ showAddWishlist });
   return (
     <StyledHeader>
-      {list && (
         <>
-          <Text>{list.name}</Text>
+        {list && <Text>{list.name}</Text> }
           <ActionsContainer>
-            <Button onClick={() => console.log('share')}>Share List</Button>
-            <Button onClick={() => setAddItemOpen(!addItemOpen)}>Add Item</Button>
+            <Button onClick={() => setShowAddWishlist(!showAddWishlist)}>Add List</Button>
+            {list && (
+              <>
+                <Button onClick={() => console.log('share')}>Share List</Button>
+                <Button onClick={() => setAddItemOpen(!addItemOpen)}>Add Item</Button>
+                </>
+              )}
           </ActionsContainer>
           <AddWishlistItemModal wishlistId={list.id} open={addItemOpen} toggleOpen={setAddItemOpen} />
         </>
-      )}
     </StyledHeader>
   )
 }
 
 const ActionsContainer = styled.div``;
+
 const StyledHeader = styled(Header)`
   display: flex;
   justify-content: space-between;

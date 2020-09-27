@@ -16,10 +16,6 @@ export default function ProfileList({}) {
   const [showAddWishlist, setShowAddWishlist] = useState(false);
   const [selectedList, setSelectedList] = useState(null);
 
-  function handleCancelAddWishlist() {
-    setShowAddWishlist(false);
-  }
-
   function handleListSelected(list) {
     setSelectedList(list);
   }
@@ -40,7 +36,7 @@ export default function ProfileList({}) {
               </Menu>
             </StyledSider>
             <Content>
-              <ProfileListEditor list={selectedList} />
+              <ProfileListEditor list={selectedList} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
             </Content>
           </Layout>
         </TabPane>
@@ -50,7 +46,7 @@ export default function ProfileList({}) {
       </StyledTabs>
       <AddWishlistModal
         addListVisible={showAddWishlist}
-        cancelClick={handleCancelAddWishlist}
+        setAddListVisible={setShowAddWishlist}
       />
     </>
   );

@@ -4,10 +4,10 @@ import {List, Space} from "antd";
 import {StarOutlined, LikeOutlined, MessageOutlined} from "@ant-design/icons";
 import {WishlistProvider} from "contexts/wishlist-context";
 
-export default function ProfileListEditor({ list }) {
+export default function ProfileListEditor({ list, showAddWishlist, setShowAddWishlist }) {
   return (
     <WishlistProvider>
-      <ProfileListHeader list={list} />
+      <ProfileListHeader list={list} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
       {list && (
         <List
           dataSource={list.items}

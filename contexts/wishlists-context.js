@@ -25,30 +25,37 @@ export const WishlistsProvider = ({ children }) => {
   const { uid } = router.query;
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  async function getWishlists(uid) {
+    if (!uid) {
+      dispatch({ type: ERROR, payload: { error: { message: 'Please provide a user id' } } })
+    } else {
+      dispatch({ type: LOADING });
+      try {
+        const wishlists = await getWishlistsForUser(uid);
+        dispatch({ type: GET_WISHLISTS, payload: { wishlists }});
+      } catch(error) {
+        dispatch({ type: ERROR, payload: { error }});
+      }
+    }
+  }
+
   useEffect(() => {
     if (uid) {
       dispatch({ type: LOADING });
-      getWishlistsForUser(uid)
-        .then((wishlists) => {
-          dispatch({ type: GET_WISHLISTS, payload: { wishlists } });
-        })
-        .catch((error) => dispatch({ type: ERROR, payload: { error } }));
+      getWishlists(uid);
     }
   }, [uid]);
 
   const addWishlist = useCallback(
-    (name, uid) => {
+    async (name, uid) => {
       if (name && uid) {
         dispatch({ type: LOADING });
-        addList(uid, name)
-          .then((docRef) => {
-            getWishlistsForUser(uid)
-              .then((wishlists) => {
-                dispatch({ type: GET_WISHLISTS, payload: { wishlists } });
-              })
-              .catch((error) => dispatch({ type: ERROR, payload: { error } }));
-          })
-          .catch((error) => dispatch({ type: ERROR, payload: { error } }));
+        try {
+          await addList(uid, name)
+          await getWishlists(uid);
+        } catch(error) {
+          dispatch({ type: ERROR, payload: { error } });
+        }
       }
     },
     [dispatch]

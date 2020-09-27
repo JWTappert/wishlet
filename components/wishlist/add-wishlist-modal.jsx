@@ -3,7 +3,7 @@ import { Form, Input, Modal } from "antd";
 import { WishlistsContext } from "contexts/wishlists-context";
 import useQueryParam from "hooks/use-query-param";
 
-export default function AddWishlistModal({ addListVisible, cancelClick }) {
+export default function AddWishlistModal({ addListVisible, setAddListVisible }) {
   const uid = useQueryParam("uid");
   const [form] = Form.useForm();
   const [name, setName] = useState("");
@@ -11,19 +11,19 @@ export default function AddWishlistModal({ addListVisible, cancelClick }) {
 
   function handleFinish(values) {
     addWishlist(values.name, uid);
-    cancelClick();
+    setAddListVisible(!addListVisible)
   }
 
   function handleOk() {
     addWishlist(form.getFieldValue("name"), uid);
-    cancelClick();
+    setAddListVisible(!addListVisible)
   }
 
   return (
     <Modal
       title="Add a List"
       visible={addListVisible}
-      onCancel={() => cancelClick()}
+      onCancel={() => setAddListVisible(!addListVisible)}
       onOk={() => handleOk()}
       bodyStyle={{ padding: "24px" }}
     >

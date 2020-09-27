@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Layout } from "antd";
 import ProfileDetails from "./profile-details";
 import ProfileList from "./profile-lists";
-import { WishlistsProvider } from "../../contexts/wishlists-context";
-import {ProfileProvider} from "../../contexts/profile-context";
+import { WishlistsProvider } from "contexts/wishlists-context";
+import {ProfileProvider} from "contexts/profile-context";
 
 const { Header, Content } = Layout;
 
