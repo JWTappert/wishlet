@@ -5,7 +5,7 @@ import { WishlistsProvider } from "../../contexts/wishlists-context";
 export default function Profile() {
   return (
     <WishlistsProvider>
-      <ProfileLayout />;
+      <ProfileLayout />
     </WishlistsProvider>
   );
 }

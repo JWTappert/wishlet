@@ -48,7 +48,6 @@ function getWishlistsForUser(uid) {
       .get()
       .then((querySnapshot) => {
         const wishlists = [];
-        console.log({ querySnapshot });
         querySnapshot.forEach((doc) => wishlists.push({id: doc.id, ...doc.data()}));
         resolve(wishlists);
       })

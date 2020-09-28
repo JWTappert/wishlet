@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
           <Nav />
         </Header>
         <Layout>
-          <Content style={{ height: "89.9vh", margin: "0 10%" }}>
+          <Content style={{ margin: "0 10%" }}>
             <Component {...pageProps} />
           </Content>
         </Layout>

@@ -1,13 +1,11 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import { Button, Form, Input, Modal } from "antd";
 import {WishlistsContext} from "contexts/wishlists-context";
 
-export default function AddWishlistItemModal({ wishlistId, open, toggleOpen }) {
+export default function AddWishlistItemModal({ open, toggleOpen }) {
   const {state, addItem } = useContext(WishlistsContext);
   const { selectedWishlist, loading, error } = state;
   const [form] = Form.useForm();
-
-  console.log('add item state', selectedWishlist);
 
   function handleCancel() {
     form.resetFields();
