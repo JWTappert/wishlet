@@ -11,14 +11,9 @@ const { TabPane } = Tabs;
 const { Sider, Content } = Layout;
 
 export default function ProfileList({}) {
-  const { state } = useContext(WishlistsContext);
-  const { loading, wishlists, error } = state;
+  const { state, selectWishlist } = useContext(WishlistsContext);
+  const { loading, wishlists, selectedWishlist, error } = state;
   const [showAddWishlist, setShowAddWishlist] = useState(false);
-  const [selectedList, setSelectedList] = useState(null);
-
-  function handleListSelected(list) {
-    setSelectedList(list);
-  }
 
   return (
     <>
@@ -29,14 +24,14 @@ export default function ProfileList({}) {
               <Menu>
                 {wishlists &&
                   wishlists.map((list, i) => (
-                    <Menu.Item key={i} onClick={() => handleListSelected(list)}>
+                    <Menu.Item key={i} onClick={() => selectWishlist(list)}>
                       {list.name}
                     </Menu.Item>
                   ))}
               </Menu>
             </StyledSider>
             <Content>
-              <ProfileListEditor list={selectedList} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
+              <ProfileListEditor list={selectedWishlist} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
             </Content>
           </Layout>
         </TabPane>

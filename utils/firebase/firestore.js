@@ -1,4 +1,4 @@
-import {firestore} from "./index";
+import {firebase, firestore} from "./index";
 
 function addList(uid, name) {
   return new Promise((resolve, reject) => {
@@ -17,13 +17,15 @@ function addList(uid, name) {
 function addItemToWishlist(wishlistId, item) {
   return new Promise((resolve, reject) => {
     const itemId = firestore.collection("temp").doc().id;
-    firestore
-      .collection("wishlists")
-      .doc(wishlistId)
-      .update({
-        items: firestore.FieldValue.arrayUnion({id: itemId, ...item}),
+    const listRef = firestore.collection("wishlists").doc(wishlistId);
+      listRef.update({
+        items: firebase.firestore.FieldValue.arrayUnion({id: itemId, ...item}),
       })
-      .then(() => resolve())
+      .then(() => {
+        listRef.get().then((snapshot) => {
+          resolve({ id: wishlistId, ...snapshot.data() })
+        })
+      })
       .catch((error) => reject(error));
   });
 }
@@ -46,6 +48,7 @@ function getWishlistsForUser(uid) {
       .get()
       .then((querySnapshot) => {
         const wishlists = [];
+        console.log({ querySnapshot });
         querySnapshot.forEach((doc) => wishlists.push({id: doc.id, ...doc.data()}));
         resolve(wishlists);
       })
@@ -59,7 +62,7 @@ function listenToWishlistChanges(wishlistId, onNext, onError) {
     .collection("wishlists")
     .doc(wishlistId)
     .onSnapshot(
-      (snapshot) => onNext(snapshot.data()),
+      (snapshot) => onNext({ id: wishlistId, ...snapshot.data() }),
       (error) => onError(error)
     );
 }

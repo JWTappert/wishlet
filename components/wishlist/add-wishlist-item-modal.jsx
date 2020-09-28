@@ -1,15 +1,13 @@
 import React, {useContext, useEffect} from "react";
 import { Button, Form, Input, Modal } from "antd";
-import {WishlistContext} from "contexts/wishlist-context";
+import {WishlistsContext} from "contexts/wishlists-context";
 
 export default function AddWishlistItemModal({ wishlistId, open, toggleOpen }) {
-  const {state, getWishlist , addItem } = useContext(WishlistContext);
-  const { loading, error } = state;
+  const {state, addItem } = useContext(WishlistsContext);
+  const { selectedWishlist, loading, error } = state;
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    getWishlist(wishlistId)
-  }, [wishlistId]);
+  console.log('add item state', selectedWishlist);
 
   function handleCancel() {
     form.resetFields();
@@ -17,9 +15,13 @@ export default function AddWishlistItemModal({ wishlistId, open, toggleOpen }) {
   }
 
   function handleSubmit() {
+    if (!selectedWishlist.id) {
+      console.error('no wishlist');
+      return;
+    }
     form.validateFields()
       .then(values => {
-        addItem(wishlistId, { name: values.name, link: values.link });
+        addItem(selectedWishlist.id, { name: values.name, link: values.link });
         form.resetFields();
         toggleOpen(!open);
       })

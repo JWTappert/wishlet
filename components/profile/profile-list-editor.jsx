@@ -2,11 +2,10 @@ import React from "react";
 import ProfileListHeader from "./profile-list-header";
 import {List, Space} from "antd";
 import {StarOutlined, LikeOutlined, MessageOutlined} from "@ant-design/icons";
-import {WishlistProvider} from "contexts/wishlist-context";
 
 export default function ProfileListEditor({ list, showAddWishlist, setShowAddWishlist }) {
   return (
-    <WishlistProvider>
+    <>
       <ProfileListHeader list={list} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
       {list && (
         <List
@@ -49,7 +48,7 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
           )}
         />
       )}
-    </WishlistProvider>
+      </>
   )
 }
 
