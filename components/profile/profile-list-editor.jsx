@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import ProfileListHeader from "./profile-list-header";
-import {List, Space} from "antd";
+import {List, Space, Popconfirm, message} from "antd";
 import {StarOutlined, LikeOutlined, DeleteOutlined} from "@ant-design/icons";
 import {WishlistsContext} from "contexts/wishlists-context";
 
@@ -61,11 +61,29 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
   )
 }
 
-const IconText = ({ icon, text, clickHandler, listId, itemId }) => (
-  <Space>
-    {React.createElement(icon)}
-    <a onClick={() => clickHandler(listId, itemId)}>{text}</a>
-  </Space>
-);
+const IconText = ({ icon, text, clickHandler, listId, itemId }) => {
+  function confirm(e) {
+    clickHandler(listId, itemId);
+    message.success('Item removed');
+  }
+
+  function cancel(e) {
+  }
+
+  return (
+    <Popconfirm
+      title="Are you sure you want to remove this item?"
+      onConfirm={confirm}
+      onCancel={cancel}
+      okText="Yes"
+      cancelText="No"
+    >
+      <Space>
+        {React.createElement(icon)}
+        <a>{text}</a>
+      </Space>
+    </Popconfirm>
+  )
+};
 
 

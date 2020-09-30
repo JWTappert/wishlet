@@ -36,9 +36,17 @@ function addItemToWishlist(wishlistId, item) {
 function removeItemFromWishlist(wishlistId, itemId) {
   return new Promise((resolve, reject) => {
     if (wishlistId && itemId) {
-      resolve({success: true });
+      const docRef = firestore.collection("wishlists").doc(wishlistId);
+      docRef.get().then(snapshot => {
+        const { items } = snapshot.data();
+        docRef.update({
+          items: items.filter(item => item.id !== itemId)
+        }).then(() => {
+          resolve({success: true });
+        }).catch(error => reject(error));
+      }).catch(error => reject(error))
     } else {
-      reject({success: true });
+      reject({success: false });
     }
   });
 }
