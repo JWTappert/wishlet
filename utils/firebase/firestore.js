@@ -16,18 +16,21 @@ function addList(uid, name) {
 
 function addItemToWishlist(wishlistId, item) {
   return new Promise((resolve, reject) => {
-    const itemId = firestore.collection("temp").doc().id;
-    const listRef = firestore.collection("wishlists").doc(wishlistId);
+    firestore.collection("items")
+      .add(item)
+      .then((docRef) => {
+      const listRef = firestore.collection("wishlists").doc(wishlistId);
       listRef.update({
-        items: firebase.firestore.FieldValue.arrayUnion({id: itemId, ...item}),
+        items: firebase.firestore.FieldValue.arrayUnion({id: docRef.id, ...item}),
       })
-      .then(() => {
-        listRef.get().then((snapshot) => {
-          resolve({ id: wishlistId, ...snapshot.data() })
+        .then(() => {
+          listRef.get().then((snapshot) => {
+            resolve({ id: wishlistId, ...snapshot.data() })
+          })
         })
-      })
-      .catch((error) => reject(error));
-  });
+        .catch((error) => reject(error));
+    });
+  })
 }
 
 function removeItemFromWishlist(wishlistId, itemId) {

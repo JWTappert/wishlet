@@ -1,14 +1,5 @@
-import React, {
-  createContext,
-  useEffect,
-  useCallback,
-  useReducer,
-} from "react";
-import {
-  addItemToWishlist,
-  addList,
-  getWishlistsForUser, removeItemFromWishlist,
-} from "utils/firebase/firestore";
+import React, {createContext, useCallback, useEffect, useReducer,} from "react";
+import {addItemToWishlist, addList, getWishlistsForUser, removeItemFromWishlist,} from "utils/firebase/firestore";
 import useQueryParam from "hooks/use-query-param";
 
 export const WishlistsContext = createContext([]);
@@ -20,6 +11,7 @@ const REMOVE_WISHLIST = "REMOVE_WISHLIST";
 const LIST_SELECTED = "LIST_SELECTED";
 const LIST_UPDATED = "LIST_UPDATED";
 const ITEM_ADDED = "ITEM_ADDED";
+const ITEM_REMOVED = "ITEM_REMOVED";
 
 const initialState = {
   loading: true,
@@ -99,7 +91,7 @@ export const WishlistsProvider = ({ children }) => {
       if (wishlistId && itemId) {
         dispatch({ type: LOADING });
         removeItemFromWishlist(wishlistId, itemId).then(() => {
-          dispatch({ type: ITEM_ADDED });
+          dispatch({ type: ITEM_REMOVED, payload: { itemId }});
         }).catch(error => {
           dispatch({ type: ERROR, payload: { error }})
         });
@@ -111,7 +103,7 @@ export const WishlistsProvider = ({ children }) => {
   );
 
   return (
-    <WishlistsContext.Provider value={{ state, addWishlist, selectWishlist, addItem }}>
+    <WishlistsContext.Provider value={{ state, addWishlist, selectWishlist, addItem, removeItem }}>
       {children}
     </WishlistsContext.Provider>
   );
@@ -155,6 +147,15 @@ const reducer = (state = [], action) => {
       loading: false,
       wishlists: state.wishlists || [],
       selectedWishlist: action.payload.selectedWishlist,
+      error: null
+    }
+  }
+  if (action.type === ITEM_REMOVED) {
+    state.selectedWishlist.items = state.selectedWishlist.items.filter(item => item.id !== action.payload.itemId);
+    return {
+      loading: false,
+      wishlists: state.wishlists || [],
+      selectedWishlist: state.selectedWishlist,
       error: null
     }
   }

@@ -19,7 +19,7 @@ export default function ProfileList({}) {
     <>
       <StyledTabs defaultActiveKey="1" style={{ height: "85%" }}>
         <TabPane tab="Your Wishlists" key="1" style={{ height: "100%" }}>
-          <Layout style={{ height: "100%" }}>
+          <Layout style={{ minHeight: '500px' }}>
             <StyledSider>
               <Menu>
                 {wishlists &&

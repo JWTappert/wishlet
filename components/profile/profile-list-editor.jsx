@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import ProfileListHeader from "./profile-list-header";
 import {List, Space} from "antd";
-import {StarOutlined, LikeOutlined, MessageOutlined} from "@ant-design/icons";
+import {StarOutlined, LikeOutlined, DeleteOutlined} from "@ant-design/icons";
+import {WishlistsContext} from "contexts/wishlists-context";
 
 export default function ProfileListEditor({ list, showAddWishlist, setShowAddWishlist }) {
+  const { removeItem } = useContext(WishlistsContext);
   return (
     <>
       <ProfileListHeader list={list} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
@@ -29,7 +31,14 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
               actions={[
                 <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
                 <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                <IconText
+                  icon={DeleteOutlined}
+                  text="Delete"
+                  key="list-vertical-message"
+                  clickHandler={removeItem}
+                  listId={list.id}
+                  itemId={item.id}
+                />,
               ]}
               extra={
                 <img
@@ -52,10 +61,10 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
   )
 }
 
-const IconText = ({ icon, text }) => (
+const IconText = ({ icon, text, clickHandler, listId, itemId }) => (
   <Space>
     {React.createElement(icon)}
-    {text}
+    <a onClick={() => clickHandler(listId, itemId)}>{text}</a>
   </Space>
 );
 
