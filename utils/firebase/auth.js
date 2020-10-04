@@ -71,7 +71,7 @@ const signOut = async () => {
 }
 
 const getUserProfile = async (uid) => {
-  if (!uid) return null;
+  if (!uid) throw "Please provide a user id";
   try {
     const userDocument = await firestore.collection(users).doc(uid).get();
     return { uid, ...userDocument.data() };
@@ -82,10 +82,21 @@ const getUserProfile = async (uid) => {
 }
 
 const updateUserProfile = async (uid, updates) => {
-  if (!uid) return null;
+  if (!uid) throw "Please provide a user id";
   try {
     const userDocumentRef = await firestore.collection(users).doc(uid);
     await userDocumentRef.update(updates);
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+const sendPasswordResetEmail = async (email) => {
+  if (!email) throw "Please provide an email address";
+
+  try {
+    await auth.sendPasswordResetEmail(email);
   } catch(error) {
     console.error(error);
     throw error;
@@ -100,7 +111,8 @@ export {
   signOut,
   getUserProfile,
   updateUserProfile,
-  getOrCreateUserProfileDocument
+  getOrCreateUserProfileDocument,
+  sendPasswordResetEmail
 }
 
 class UserProfile {

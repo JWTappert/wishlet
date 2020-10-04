@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import {
   auth,
-  getOrCreateUserProfileDocument,
+  getOrCreateUserProfileDocument, sendPasswordResetEmail,
   signIn,
   signInWithGoogle,
   signOut,
@@ -75,6 +75,7 @@ export const UserProvider = ({ children }) => {
   }
 
   const handleSignUp = async (email, password) => {
+    setLoading(true);
     try {
       await signUp(email, password);
       setLoading(false);
@@ -85,6 +86,17 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const handlePasswordReset = async (email) => {
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(email);
+      setLoading(false);
+    } catch(error) {
+      setLoading(false);
+      setError(error);
+    }
+  }
+
   const value = {
     user,
     loading,
@@ -94,6 +106,7 @@ export const UserProvider = ({ children }) => {
     handleSignInWithGoogle,
     handleSignOut,
     handleSignUp,
+    handlePasswordReset
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

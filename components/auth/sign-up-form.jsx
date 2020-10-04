@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Card, Form, Input, Button, Typography } from "antd";
 import { UserContext } from "contexts/user-context";
 import GoogleAuthProvider from "./google-auth-provider";
+import ResetPasswordModal from "./reset-password-modal";
 
 const layout = {
   labelCol: { span: 6 },
@@ -15,7 +16,8 @@ export default function SignUpForm({}) {
   const { loading, error, setError, handleSignIn, handleSignUp } = useContext(UserContext);
   const [form] = Form.useForm();
   const [isSignUp, setIsSignUp] = useState(false);
-  const { Title, Text, Link } = Typography;
+  const [openResetModal, setOpenResetModal] = useState(false);
+  const { Paragraph, Title, Text, Link } = Typography;
 
   useEffect(() => {
     const clearErrors = () => {
@@ -34,7 +36,12 @@ export default function SignUpForm({}) {
     handleSignUp(email, password);
   };
 
+  const onPasswordResetClick = () => {
+    setOpenResetModal(true);
+  }
+
   return (
+    <>
     <Card style={{ width: "50%", textAlign: "center" }}>
       <Title>{isSignUp ? "Sign Up" : "Sign In"}</Title>
       <Form
@@ -82,10 +89,20 @@ export default function SignUpForm({}) {
         </Form.Item>
         <Form.Item style={{ justifyContent: "center" }}>
           {!isSignUp && (
-            <Text>
-              Don't have an account?{" "}
-              <Link onClick={() => setIsSignUp(true)}>Sign Up</Link>.
-            </Text>
+            <>
+            <Paragraph>
+              <Text>
+                Don't have an account?{" "}
+                <Link onClick={() => setIsSignUp(true)}>Sign Up</Link>.
+              </Text>
+            </Paragraph>
+            <Paragraph>
+              <Text>
+                Forgot your password?{" "}
+                <Link onClick={() => onPasswordResetClick()}>Reset Password</Link>.
+              </Text>
+            </Paragraph>
+            </>
           )}
           {isSignUp && (
             <Text>
@@ -109,5 +126,7 @@ export default function SignUpForm({}) {
         </Form.Item>
       </Form>
     </Card>
+      <ResetPasswordModal showResetPassModal={openResetModal} setShowResetPassModal={setOpenResetModal} />
+      </>
   );
 }

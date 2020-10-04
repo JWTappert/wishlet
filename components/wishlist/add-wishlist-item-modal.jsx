@@ -40,7 +40,7 @@ export default function AddWishlistItemModal({ open, toggleOpen }) {
         </Button>,
         <Button key="submit" type="primary" onClick={handleSubmit}>
           Submit
-        </Button>,
+        </Button>
       ]}
     >
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
