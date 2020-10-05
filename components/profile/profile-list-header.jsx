@@ -10,12 +10,13 @@ const {Text} = Typography;
 export default function ProfileListHeader({ list, showAddWishlist, setShowAddWishlist }) {
   const uid = useQueryParam("uid");
   const [addItemOpen, setAddItemOpen] = useState(false);
-  const { deleteWishlist } = useContext(WishlistsContext);
+  const { deleteWishlist, selectWishlist } = useContext(WishlistsContext);
 
   async function confirm(wishlistId) {
     if (!wishlistId || !uid) return;
     try {
       await deleteWishlist(wishlistId, uid);
+      selectWishlist(null);
     } catch(error) {
       console.error(error);
     }
