@@ -15,7 +15,6 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
   const { loading, error, setError, handlePasswordReset } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  console.log({ error });
   useEffect(() => {
     const clearErrors = () => {
       setError(null);
