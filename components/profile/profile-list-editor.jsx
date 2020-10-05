@@ -29,8 +29,6 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
               }}
               key={item.title}
               actions={[
-                <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
                 <IconText
                   icon={DeleteOutlined}
                   text="Delete"

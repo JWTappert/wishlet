@@ -1,5 +1,5 @@
 import React, {createContext, useCallback, useEffect, useReducer,} from "react";
-import {addItemToWishlist, addList, getWishlistsForUser, removeItemFromWishlist,} from "utils/firebase/firestore";
+import {addItemToWishlist, addList, deleteList, getWishlistsForUser, removeItemFromWishlist,} from "utils/firebase/firestore";
 import useQueryParam from "hooks/use-query-param";
 
 export const WishlistsContext = createContext([]);
@@ -67,6 +67,18 @@ export const WishlistsProvider = ({ children }) => {
     [dispatch]
   );
 
+  const deleteWishlist = useCallback(async (wishlistId, uid) => {
+    if (wishlistId) {
+      dispatch({ type: LOADING });
+      try {
+        await deleteList(wishlistId);
+        await getWishlists(uid);
+      } catch(error) {
+        dispatch({ type: ERROR, payload: { error }});
+      }
+    }
+  }, [dispatch]);
+
   /*
      item actions
   */
@@ -103,7 +115,7 @@ export const WishlistsProvider = ({ children }) => {
   );
 
   return (
-    <WishlistsContext.Provider value={{ state, addWishlist, selectWishlist, addItem, removeItem }}>
+    <WishlistsContext.Provider value={{ state, addWishlist, deleteWishlist, selectWishlist, addItem, removeItem }}>
       {children}
     </WishlistsContext.Provider>
   );

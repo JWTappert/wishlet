@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import {Button, Layout, Typography} from "antd";
+import {Button, Layout, Popconfirm, Space, Typography} from "antd";
 import {AddWishlistItemModal} from "components/wishlist";
+import {WishlistsContext} from "contexts/wishlists-context";
+import useQueryParam from "../../hooks/use-query-param";
 const {Header} = Layout;
 const {Text} = Typography;
 
 export default function ProfileListHeader({ list, showAddWishlist, setShowAddWishlist }) {
+  const uid = useQueryParam("uid");
   const [addItemOpen, setAddItemOpen] = useState(false);
+  const { deleteWishlist } = useContext(WishlistsContext);
+
+  async function confirm(wishlistId) {
+    if (!wishlistId || !uid) return;
+    try {
+      await deleteWishlist(wishlistId, uid);
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  function cancel() {
+  }
+
   return (
     <StyledHeader>
         <>
@@ -16,6 +33,17 @@ export default function ProfileListHeader({ list, showAddWishlist, setShowAddWis
             {list && (
               <>
                 <Button onClick={() => console.log('share')}>Share List</Button>
+                <Button>
+                  <Popconfirm
+                    title="Are you sure you want to remove this wishlist?"
+                    onConfirm={() => confirm(list.id)}
+                    onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    Delete List
+                  </Popconfirm>
+                </Button>
                 <Button onClick={() => setAddItemOpen(!addItemOpen)}>Add Item</Button>
                 </>
               )}

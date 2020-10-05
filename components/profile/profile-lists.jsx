@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
-import Link from "next/link";
 import styled from "styled-components";
-import { Tabs, Layout, Menu, Button, Typography } from "antd";
+import { Tabs, Layout, Menu } from "antd";
 import { WishlistsContext } from "contexts/wishlists-context";
 import { AddWishlistModal } from "../wishlist";
 import ProfileListEditor from "./profile-list-editor";
-import useQueryParam from "hooks/use-query-param";
 
 const { TabPane } = Tabs;
 const { Sider, Content } = Layout;

@@ -14,6 +14,17 @@ function addList(uid, name) {
   });
 }
 
+function deleteList(wishlistId) {
+  return new Promise((resolve, reject) => {
+    firestore
+      .collection("wishlists")
+      .doc(wishlistId)
+      .delete()
+      .then(() => resolve())
+      .catch(error => reject(error));
+  });
+}
+
 function addItemToWishlist(wishlistId, item) {
   return new Promise((resolve, reject) => {
     firestore.collection("items")
@@ -79,6 +90,7 @@ function listenToWishlistChanges(wishlistId, onNext, onError) {
 
 export {
   addList,
+  deleteList,
   getWishlistsForUser,
   listenToWishlistChanges,
   addItemToWishlist,

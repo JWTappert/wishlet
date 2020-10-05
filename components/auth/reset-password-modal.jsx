@@ -15,12 +15,13 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
   const { loading, error, setError, handlePasswordReset } = useContext(UserContext);
   const [form] = Form.useForm();
 
+  console.log({ error });
   useEffect(() => {
     const clearErrors = () => {
       setError(null);
     }
     clearErrors();
-  }, []);
+  }, [error]);
 
   const handleCancel = () => {
     setShowResetPassModal(!showResetPassModal);
@@ -28,9 +29,12 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
 
   const handleSubmit = (values) => {
     const { email } = values;
-    setError(null);
-    handlePasswordReset(email);
-    setShowResetPassModal(!showResetPassModal);
+    try {
+      handlePasswordReset(email);
+      setShowResetPassModal(!showResetPassModal);
+    } catch(error) {
+      setError(error);
+    }
   }
 
   return (
@@ -78,6 +82,14 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
       </Form>
     </Modal>
   );
+}
+
+const EmailSentConfirmation = () => {
+  return (
+    <Paragraph>
+      <Text>We have sent you an email to reset your password</Text>
+    </Paragraph>
+  )
 }
 
 export default ResetPasswordModal;
