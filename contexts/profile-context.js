@@ -18,6 +18,7 @@ export const ProfileProvider = ({ children }) => {
       dispatch({ type: LOADING });
       const userProfileDocument = await getUserProfile(uid);
       dispatch({ type: GET, payload: { profile: userProfileDocument }});
+      return userProfileDocument;
     } catch(error) {
       dispatch({ type: ERROR });
     }
