@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+I created this project to familiarize myself with new tools that I will be working with at my current job. React, Mobx, and Next. Building with these tools is the fastest way to proficiency. Trying to keep track of todos with issues.
 
 ## Getting Started
 
