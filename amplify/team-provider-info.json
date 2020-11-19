@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wishlet-dev-202828-authRole",
+      "UnauthRoleArn": "arn:aws:iam::046488850800:role/amplify-wishlet-dev-202828-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::046488850800:role/amplify-wishlet-dev-202828-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-wishlet-dev-202828-deployment",
+      "UnauthRoleName": "amplify-wishlet-dev-202828-unauthRole",
+      "StackName": "amplify-wishlet-dev-202828",
+      "StackId": "arn:aws:cloudformation:us-west-2:046488850800:stack/amplify-wishlet-dev-202828/adf48c90-2a1f-11eb-ad0a-067b8a61cb29",
+      "AmplifyAppId": "dl6ung53tr4g2"
+    },
+    "categories": {
+      "auth": {
+        "wishlet99bdb1ca": {
+          "hostedUIProviderCreds": "[]"
+        }
+      }
+    }
+  }
+}

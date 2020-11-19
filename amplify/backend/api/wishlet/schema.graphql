@@ -1,0 +1,39 @@
+type User 
+  @model 
+  {
+    id: ID!
+    name: String!
+    displayName: String!
+    email: String!
+    photoURL: String
+    website: String
+    facebook: String
+    instagram: String
+    twitter: String
+    youtube: String
+
+    wishlists: [Wishlist] @connection(keyName: "byWishlists", fields: ["id"])
+}
+
+type Wishlist 
+  @model 
+  @key(name: "byWishlists", fields: ["userID"]) 
+  {
+    id: ID!
+    name: String!
+    userID: ID!
+    user: User @connection(fields: ["userID"])
+    items: [Item] @connection(keyName: "byWishlist", fields: ["id"])
+}
+
+type Item 
+  @model 
+  @key(name: "byWishlist", fields: ["wishlistID", "name"]) 
+  {
+    id: ID!
+    wishlistID: ID!
+    wishlist: Wishlist @connection(fields: ["wishlistID"])
+    name: String!
+    link: String
+    photoURL: String
+}
