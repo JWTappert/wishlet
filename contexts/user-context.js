@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/router";
 
 import {Amplify, Auth, Hub} from "aws-amplify";
-import awsconfig from "src/aws-exports";
+import awsconfig from "aws-exports";
 import {setUserCookie} from "../utils/user";
 Amplify.configure(awsconfig);
 

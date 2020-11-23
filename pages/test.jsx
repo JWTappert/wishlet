@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import Amplify from "aws-amplify";
-import awsconfig from "src/aws-exports";
+import awsconfig from "aws-exports";
 import {signIn, signOut} from "../utils/aws/auth";
 Amplify.configure(awsconfig);
 

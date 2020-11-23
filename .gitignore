@@ -36,6 +36,8 @@ yarn-error.log*
 # intelliJ
 /.idea/
 
+.vscode/
+
 #amplify
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -51,5 +53,3 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
-
-.vscode/
