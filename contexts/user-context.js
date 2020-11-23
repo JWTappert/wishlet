@@ -9,6 +9,11 @@ import {
 } from "utils/firebase/auth";
 import { useRouter } from "next/router";
 
+import {Amplify, Auth, Hub} from "aws-amplify";
+import awsconfig from "src/aws-exports";
+import {setUserCookie} from "../utils/user";
+Amplify.configure(awsconfig);
+
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -17,25 +22,33 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    // this will be the case when other oAuth providers are used
-    const getOrCreateUser = async (incomingUser) => {
-      try {
-        const user = await getOrCreateUserProfileDocument(incomingUser);
-        setUser(user);
+  const [userState, setUserState] = useState();
+
+  const authListener = (data) => {
+    switch (data.payload.event) {
+      case 'signIn':
+        const cognitoUser = data.payload.data;
+        setUser(cognitoUser);
+        setUserCookie(cognitoUser);
         setLoading(false);
-      } catch(error) {
-        setError(error);
-        setLoading(false);
-      }
+        break;
+      case 'signUp':
+        console.log('user signed up');
+        break;
+      case 'signOut':
+        console.log('user signed out');
+        break;
+      case 'signIn_failure':
+        console.log('user sign in failed');
+        break;
+      case 'configured':
+        console.log('the Auth module is configured');
     }
+  }
 
-    const unsubscribe = auth.onAuthStateChanged(async (googleUser) => {
-      setLoading(false);
-      await getOrCreateUser(googleUser);
-    });
-
-    return () => unsubscribe();
+  useEffect(() => {
+    Hub.listen('auth', authListener);
+    return () => Hub.remove('auth', authListener);
   }, []);
 
   const handleSignIn = async (email, password) => {
