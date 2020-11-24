@@ -5,11 +5,12 @@ import Link from "next/link";
 import { Avatar, Input, Menu, Modal, Layout } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { UserContext } from "contexts/user-context";
+import {signOut} from "utils/aws/auth";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
 export default function Nav({}) {
-  const { user, handleSignOut } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState("");
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function Nav({}) {
                   <a>Profile</a>
                 </Link>
               </Menu.Item>
-              <Menu.Item onClick={handleSignOut}>Sign Out</Menu.Item>
+              <Menu.Item onClick={() => signOut()}>Sign Out</Menu.Item>
             </StyledSubMenu>
           )}
         </Menu>

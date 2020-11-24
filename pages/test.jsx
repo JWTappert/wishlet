@@ -1,21 +1,12 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import Amplify from "aws-amplify";
-import awsconfig from "aws-exports";
-import {signIn, signOut} from "../utils/aws/auth";
-Amplify.configure(awsconfig);
-
-
+import {signIn, signOut} from "utils/aws/auth";
 
 export default function Test() {
   const [user, setUser] = useState();
   async function handleSignIn() {
     const result  = await signIn('justin.tappert@dutchie.com', 'password');
     setUser(result);
-  }
-
-  async function handleSignOut() {
-    await signOut();
   }
 
   return (
@@ -28,7 +19,7 @@ export default function Test() {
           <p>no user</p>
         )}
         <button onClick={handleSignIn}>Sign In</button>
-        <button onClick={handleSignOut}>Sign Out</button>
+        <button onClick={signOut}>Sign Out</button>
     </Container>
   )
 }

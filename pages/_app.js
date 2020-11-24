@@ -3,6 +3,10 @@ import React from "react";
 import "../styles/globals.css";
 import "antd/dist/antd.css";
 
+import { Amplify } from "aws-amplify";
+import awsconfig from "aws-exports";
+Amplify.configure(awsconfig);
+
 import { Layout } from "antd";
 import Nav from "components/nav/nav";
 import { UserProvider } from "contexts/user-context";

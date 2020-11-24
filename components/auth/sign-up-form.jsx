@@ -3,6 +3,7 @@ import { Card, Form, Input, Button, Typography } from "antd";
 import { UserContext } from "contexts/user-context";
 import GoogleAuthProvider from "./google-auth-provider";
 import ResetPasswordModal from "./reset-password-modal";
+import {signIn, signUp} from "utils/aws/auth";
 
 const layout = {
   labelCol: { span: 6 },
@@ -13,7 +14,7 @@ const tailLayout = {
 };
 
 export default function SignUpForm({}) {
-  const { loading, error, setError, handleSignIn, handleSignUp } = useContext(UserContext);
+  const { loading, error, setError } = useContext(UserContext);
   const [form] = Form.useForm();
   const [isSignUp, setIsSignUp] = useState(false);
   const [openResetModal, setOpenResetModal] = useState(false);
@@ -26,17 +27,17 @@ export default function SignUpForm({}) {
     clearErrors();
   }, []);
 
-  const onSignIn = (values) => {
+  async function onSignIn(values) {
     const { email, password } = values;
-    handleSignIn(email, password);
+    await signIn(email, password);
   };
 
-  const onSignUp = (values) => {
+  async function onSignUp(values) {
     const { email, password } = values;
-    handleSignUp(email, password);
+    await signUp(email, password);
   };
 
-  const onPasswordResetClick = () => {
+  function onPasswordResetClick() {
     setOpenResetModal(true);
   }
 

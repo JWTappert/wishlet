@@ -1,6 +1,8 @@
-import React, { useContext, useEffect} from  'react';
+import React, { useState, useContext, useEffect} from  'react';
 import {Button, Form, Input, Modal, Typography} from "antd";
 import {UserContext} from "contexts/user-context";
+import {forgotPassword, forgotPasswordSubmit} from "utils/aws/auth";
+
 const {Paragraph, Text} = Typography;
 
 const layout = {
@@ -12,8 +14,11 @@ const tailLayout = {
 };
 
 function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
-  const { loading, error, setError, handlePasswordReset } = useContext(UserContext);
-  const [form] = Form.useForm();
+  const { loading, error, setError } = useContext(UserContext);
+  const [forgotPasswordResolved, setForgotPasswordResolved] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
+  const [forgotPasswordForm] = Form.useForm();
+  const [completeforgotPasswordForm] = Form.useForm();
 
   useEffect(() => {
     const clearErrors = () => {
@@ -23,16 +28,27 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
   }, [error]);
 
   const handleCancel = () => {
+    setUserEmail(null);
     setShowResetPassModal(!showResetPassModal);
   }
 
-  const handleSubmit = (values) => {
+  async function handleForgotPassword(values) {
     const { email } = values;
     try {
-      handlePasswordReset(email);
-      setShowResetPassModal(!showResetPassModal);
+      await forgotPassword(email);
+      setForgotPasswordResolved(true);
+      setUserEmail(email);
     } catch(error) {
-      setError(error);
+      console.error(error);
+    }
+  }
+
+  async function handleSubmit(values) {
+    const { code, newPassword } = values;
+    try {
+      await forgotPasswordSubmit(userEmail, code, newPassword);
+    } catch(error) {
+      console.error(error);
     }
   }
 
@@ -51,10 +67,10 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
     >
       <Paragraph>
         <Text>
-          Enter your email address and you will be sent password reset instructions.
+          Enter the email address used for this account.
         </Text>
       </Paragraph>
-      <Form layout="vertical" form={form} onFinish={handleSubmit}>
+      <Form layout="vertical" form={forgotPasswordForm} onFinish={handleForgotPassword}>
         <Form.Item label="Email" name="email" rules={[
           {
             type: "email",
@@ -73,12 +89,57 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
             <Text style={{ color: "red" }}>{error.message}</Text>
           </Form.Item>
         )}
-        <Form.Item {...tailLayout}>
+        {!forgotPasswordResolved && (<Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
-            Reset Password
+            Send Verification Code
           </Button>
-        </Form.Item>
+          </Form.Item>)
+        }
       </Form>
+      {forgotPasswordResolved && (
+        <React.Fragment>
+          <Paragraph>
+            <Text>
+              A verification code has been sent to this email address.
+            </Text>
+          </Paragraph>
+        <Form layout="vertical" form={completeforgotPasswordForm} onFinish={handleSubmit}>
+          <Form.Item
+            label="Verification Code"
+            name="code"
+            rules={[{ required: true, message: "Enter the code that was emailed to you"}]}>
+            <Input type="text" />
+          </Form.Item>
+          <Form.Item
+            label="New Password"
+            name="newPassword"
+            rules={[{ required: true, message: "Enter your new password"}]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label="Verify password"
+            name="verifyPassword"
+            rules={[
+              { required: true, message: "Please re-enter your password"},
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (!value || getFieldValue('newPassword') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('The two passwords that you entered do not match!');
+                },
+              }),
+              ]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+        </React.Fragment>
+      )}
     </Modal>
   );
 }

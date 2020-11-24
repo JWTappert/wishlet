@@ -1,12 +1,12 @@
 {
-    "identityPoolName": "wishlet99bdb1ca_identitypool_99bdb1ca",
+    "identityPoolName": "wishlet_identity_pool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "wishle99bdb1ca",
-    "userPoolName": "wishlet99bdb1ca_userpool_99bdb1ca",
+    "resourceNameTruncated": "wishle478d6043",
+    "userPoolName": "wishlet_user_pool",
     "autoVerifiedAttributes": [
         "email"
     ],
-    "mfaConfiguration": "OFF",
+    "mfaConfiguration": "OPTIONAL",
     "mfaTypes": [
         "SMS Text Message"
     ],
@@ -21,17 +21,37 @@
         "email"
     ],
     "userpoolClientGenerateSecret": true,
-    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientRefreshTokenValidity": "7",
     "userpoolClientWriteAttributes": [
+        "address",
+        "birthdate",
+        "gender",
+        "locale",
+        "name",
+        "phone_number",
+        "picture",
+        "profile",
+        "updated_at",
+        "website",
         "email"
     ],
     "userpoolClientReadAttributes": [
-        "email"
+        "address",
+        "birthdate",
+        "email",
+        "gender",
+        "locale",
+        "name",
+        "phone_number",
+        "picture",
+        "profile",
+        "updated_at",
+        "website"
     ],
-    "userpoolClientLambdaRole": "wishle99bdb1ca_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
-    "sharedId": "99bdb1ca",
-    "resourceName": "wishlet99bdb1ca",
+    "userpoolClientLambdaRole": "wishle478d6043_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": true,
+    "sharedId": "478d6043",
+    "resourceName": "wishlet",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,16 +65,22 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
+    "useDefault": "manual",
+    "thirdPartyAuth": true,
+    "authProviders": [],
     "usernameAttributes": [
         "email"
     ],
-    "hostedUIDomainName": "wishlet99bdb1ca-99bdb1ca",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://www.wishlet.io/\"],\"LogoutURLs\":[\"https://www.wishlet.io/\"]}",
+    "userPoolGroups": false,
+    "adminQueries": true,
+    "triggers": "{}",
+    "hostedUI": false,
     "userPoolGroupList": [],
+    "adminQueryGroup": "admin",
     "serviceName": "Cognito",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
     "dependsOn": []
 }

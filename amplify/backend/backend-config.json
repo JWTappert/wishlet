@@ -15,14 +15,51 @@
           "additionalAuthenticationProviders": []
         }
       }
+    },
+    "AdminQueries": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "wishlet",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7981f723",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        }
+      ]
     }
   },
   "auth": {
-    "wishlet99bdb1ca": {
+    "wishlet": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
+    }
+  },
+  "function": {
+    "AdminQueries7981f723": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "wishlet",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
     }
   }
 }

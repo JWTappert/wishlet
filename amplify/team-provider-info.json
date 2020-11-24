@@ -13,9 +13,7 @@
     },
     "categories": {
       "auth": {
-        "wishlet99bdb1ca": {
-          "hostedUIProviderCreds": "[]"
-        }
+        "wishlet": {}
       }
     }
   }
