@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {Auth, Hub} from "aws-amplify";
-import {getUserFromCookie, setUserCookie} from "../utils/user";
 
 export const UserContext = createContext();
 
