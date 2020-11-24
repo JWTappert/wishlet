@@ -1,6 +1,5 @@
 import React, {useState, useRef} from 'react';
 import styled from "styled-components";
-import { uploadPhoto } from "utils/firebase/storage";
 import {LoadingOutlined, UploadOutlined} from "@ant-design/icons";
 import useQueryParam from "hooks/use-query-param";
 
@@ -38,7 +37,7 @@ const PhotoUpload = ({url, setUrl}) => {
       setUrl(reader.result);
       setLoading(true);
       try {
-        const url = await uploadPhoto(uid, file);
+        // const url = await uploadPhoto(uid, file);
         setLoading(false);
       } catch(error) {
         console.error(error);

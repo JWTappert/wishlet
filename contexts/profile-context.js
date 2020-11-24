@@ -1,5 +1,4 @@
 import React, {createContext, useReducer, useEffect } from "react";
-import { getUserProfile, updateUserProfile } from "utils/firebase/auth";
 import useQueryParam from "../hooks/use-query-param";
 
 export const ProfileContext = createContext([]);
@@ -9,7 +8,7 @@ export const ProfileProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getProfile(uid);
+    // getProfile(uid);
   }, [uid]);
 
   const getProfile = async (uid) => {

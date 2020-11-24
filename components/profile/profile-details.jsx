@@ -4,13 +4,14 @@ import { Row, Col, Spin, Typography, Descriptions, Avatar, Statistic } from "ant
 import { UserOutlined, EditOutlined } from "@ant-design/icons";
 import ProfileEditModal from "./profile-edit-modal";
 import useQueryParam from "hooks/use-query-param";
-import {ProfileContext} from "contexts/profile-context";
+import {UserContext} from "contexts/user-context";
+import {observer} from "mobx-react-lite";
 
 const { Title } = Typography;
 
-export default function ProfileDetails() {
-  const { state } = useContext(ProfileContext);
-  const { profile, loading, error } = state;
+const ProfileDetails = observer(() => {
+  const user = useContext(UserContext);
+  const { profile, loading, error } = user;
   const [editing, setEditing] = useState(false);
 
   const {
@@ -48,16 +49,16 @@ export default function ProfileDetails() {
              <Row>
                <Row gutter={[50, 50]} justify="end">
                  <Col>
-                   <Statistic title="Wishlists" value={22} />
+                   <Statistic title="Wishlists" value={user.wishlists} />
                  </Col>
                  <Col>
-                   <Statistic title="Items" value={202} />
+                   <Statistic title="Items" value={user.items} />
                  </Col>
                  <Col>
-                   <Statistic title="Following" value={2} />
+                   <Statistic title="Following" value={user.following} />
                  </Col>
                  <Col>
-                   <Statistic title="Followers" value={10} />
+                   <Statistic title="Followers" value={user.followers} />
                  </Col>
                  <Col>
                    <a onClick={() => setEditing(true)}>
@@ -89,10 +90,11 @@ export default function ProfileDetails() {
            <Spin size="large" />
          </Loading>
        )}
-       <ProfileEditModal showEdit={editing} setEdit={setEditing} />
+       {/*<ProfileEditModal showEdit={editing} setEdit={setEditing} />*/}
      </Container>
   );
-}
+});
+export default ProfileDetails;
 
 const Container = styled.div`
   padding: 1em 5em 2em 5em;

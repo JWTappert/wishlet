@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Avatar, Input, Menu, Modal, Layout } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
-import { UserContext } from "contexts/user-context";
+import { AuthContext } from "contexts/auth-context";
 import {signOut} from "utils/aws/auth";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
 export default function Nav({}) {
-  const { user } = useContext(UserContext);
+  const user = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState("");
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function Nav({}) {
               title={user.displayName ? user.displayName : 'User'}
             >
               <Menu.Item>
-                <Link href="/[uid]/profile" as={`/${user.uid}/profile`}>
+                <Link href="/[uid]/profile" as={`/${user.username}/profile`}>
                   <a>Profile</a>
                 </Link>
               </Menu.Item>

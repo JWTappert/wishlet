@@ -1,5 +1,4 @@
 import React, {createContext, useCallback, useEffect, useReducer,} from "react";
-import {addItemToWishlist, addList, deleteList, getWishlistsForUser, removeItemFromWishlist,} from "utils/firebase/firestore";
 import useQueryParam from "hooks/use-query-param";
 
 export const WishlistsContext = createContext([]);
@@ -30,7 +29,7 @@ export const WishlistsProvider = ({ children }) => {
   useEffect(() => {
     if (uid) {
       dispatch({ type: LOADING });
-      getWishlists(uid);
+      // getWishlists(uid);
     }
   }, [uid]);
 

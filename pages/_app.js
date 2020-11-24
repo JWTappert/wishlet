@@ -9,13 +9,15 @@ Amplify.configure(awsconfig);
 
 import { Layout } from "antd";
 import Nav from "components/nav/nav";
-import { UserProvider } from "contexts/user-context";
+import {AuthProvider} from "../contexts/auth-context";
+import {UserProvider} from "../contexts/user-context";
 
 function MyApp({ Component, pageProps }) {
   const { Header, Footer, Content } = Layout;
 
   return (
-    <UserProvider>
+    <AuthProvider>
+      <UserProvider>
       <Head>
         <title>Wishlet</title>
         <link rel="icon" href="/favicon.ico" />
@@ -31,7 +33,8 @@ function MyApp({ Component, pageProps }) {
         </Layout>
         <Footer>Footer</Footer>
       </Layout>
-    </UserProvider>
+      </UserProvider>
+    </AuthProvider>
   );
 }
 

@@ -47,13 +47,9 @@ async function forgotPasswordSubmit(username, code, password) {
 }
 
 export {
-  // auth,
   signIn,
   signUp,
-  // signInWithGoogle,
   signOut,
-  // getUserProfile,
-  // updateUserProfile,
   forgotPassword,
   forgotPasswordSubmit,
 }
