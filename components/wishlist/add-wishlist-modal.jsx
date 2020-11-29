@@ -1,21 +1,21 @@
 import React, { useState, useContext } from "react";
 import { Form, Input, Modal } from "antd";
-import { WishlistsContext } from "contexts/wishlists-context";
 import useQueryParam from "hooks/use-query-param";
+import {UserContext} from "../../contexts/user-context";
 
 export default function AddWishlistModal({ addListVisible, setAddListVisible }) {
   const uid = useQueryParam("uid");
   const [form] = Form.useForm();
   const [name, setName] = useState("");
-  const { addWishlist } = useContext(WishlistsContext);
+  const user = useContext(UserContext);
 
   function handleFinish(values) {
-    addWishlist(values.name, uid);
+    user.createWishlist(values.name, uid);
     setAddListVisible(!addListVisible)
   }
 
   function handleOk() {
-    addWishlist(form.getFieldValue("name"), uid);
+    user.createWishlist(form.getFieldValue("name"), uid);
     setAddListVisible(!addListVisible)
   }
 

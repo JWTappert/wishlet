@@ -14,18 +14,10 @@ const tailLayout = {
 };
 
 function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
-  const { loading, error, setError } = useContext(UserContext);
   const [forgotPasswordResolved, setForgotPasswordResolved] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const [forgotPasswordForm] = Form.useForm();
   const [completeforgotPasswordForm] = Form.useForm();
-
-  useEffect(() => {
-    const clearErrors = () => {
-      setError(null);
-    }
-    clearErrors();
-  }, [error]);
 
   const handleCancel = () => {
     setUserEmail(null);
@@ -84,13 +76,13 @@ function ResetPasswordModal({ showResetPassModal, setShowResetPassModal }) {
         >
           <Input type="text" />
         </Form.Item>
-        {error && (
-          <Form.Item style={{ justifyContent: "center" }}>
-            <Text style={{ color: "red" }}>{error.message}</Text>
-          </Form.Item>
-        )}
+        {/*{error && (*/}
+        {/*  <Form.Item style={{ justifyContent: "center" }}>*/}
+        {/*    <Text style={{ color: "red" }}>{error.message}</Text>*/}
+        {/*  </Form.Item>*/}
+        {/*)}*/}
         {!forgotPasswordResolved && (<Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit">
             Send Verification Code
           </Button>
           </Form.Item>)

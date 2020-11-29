@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Form, Input, Button, Typography } from "antd";
-import { UserContext } from "contexts/user-context";
 import GoogleAuthProvider from "./google-auth-provider";
 import ResetPasswordModal from "./reset-password-modal";
 import {signIn, signUp} from "utils/aws/auth";
@@ -14,18 +13,10 @@ const tailLayout = {
 };
 
 export default function SignUpForm({}) {
-  const { loading, error, setError } = useContext(UserContext);
   const [form] = Form.useForm();
   const [isSignUp, setIsSignUp] = useState(false);
   const [openResetModal, setOpenResetModal] = useState(false);
   const { Paragraph, Title, Text, Link } = Typography;
-
-  useEffect(() => {
-    const clearErrors = () => {
-      setError(null);
-    }
-    clearErrors();
-  }, []);
 
   async function onSignIn(values) {
     const { email, password } = values;
@@ -112,13 +103,13 @@ export default function SignUpForm({}) {
             </Text>
           )}
         </Form.Item>
-        {error && (
-          <Form.Item style={{ justifyContent: "center" }}>
-            <Text style={{ color: "red" }}>{error.message}</Text>
-          </Form.Item>
-        )}
+        {/*{error && (*/}
+        {/*  <Form.Item style={{ justifyContent: "center" }}>*/}
+        {/*    <Text style={{ color: "red" }}>{error.message}</Text>*/}
+        {/*  </Form.Item>*/}
+        {/*)}*/}
         <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit">
             {isSignUp ? "Sign Up" : "Sign in"}
           </Button>
         </Form.Item>

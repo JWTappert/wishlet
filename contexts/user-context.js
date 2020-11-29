@@ -1,12 +1,12 @@
 import React, { createContext } from "react";
 
 import UserState from "stores/user";
-import * as AWS from "utils/aws/user";
+import API from "utils/aws";
 import useQueryParam from "../hooks/use-query-param";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const uid = useQueryParam("uid");
-  return <UserContext.Provider value={new UserState(AWS, { username: uid })}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={new UserState(API, { username: uid })}>{children}</UserContext.Provider>;
 };

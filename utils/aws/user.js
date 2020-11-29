@@ -4,7 +4,7 @@ import * as mutations from "graphql/mutations";
 
 async function getUser(userId) {
   try {
-    const response = await API.graphql({ query: queries.getUser, variables: { id: userId }});
+    const response = await API.graphql({query: queries.getUser, variables: { id: userId } });
     return response.data.getUser;
   } catch(error) {
     console.error(error);
@@ -14,7 +14,7 @@ async function getUser(userId) {
 
 async function updateUser(updates) {
   try {
-    const response = await API.graphql({query: mutations.updateUser, variables: { input: updates } });
+    const response = await API.graphql({query: mutations.updateUser, variables: { input: updates }});
     return response.data.updateUser;
   } catch(error) {
     console.error(error);

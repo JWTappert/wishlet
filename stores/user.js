@@ -4,6 +4,7 @@ export default class UserState {
   transportLayer
   userId
   profile
+
   error
   loading = true;
 
@@ -45,10 +46,24 @@ export default class UserState {
       });
   }
 
+  createWishlist(name) {
+    this.loading = true;
+    this.transportLayer.createWishlist(this.userId, name).then(list => {
+      runInAction(() => {
+        this.loading = false;
+        this.profile.wishlists.items.push(list);
+      });
+    })
+  }
+
   /*
     COMPUTED
   */
   get wishlists() {
+    return this.profile?.wishlists.items;
+  }
+
+  get wishlistCount() {
     return this.profile?.wishlists.length || 0;
   }
 

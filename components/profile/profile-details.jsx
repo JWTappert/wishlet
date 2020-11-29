@@ -49,7 +49,7 @@ const ProfileDetails = observer(() => {
              <Row>
                <Row gutter={[50, 50]} justify="end">
                  <Col>
-                   <Statistic title="Wishlists" value={user.wishlists} />
+                   <Statistic title="Wishlists" value={user.wishlistCount} />
                  </Col>
                  <Col>
                    <Statistic title="Items" value={user.items} />

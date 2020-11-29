@@ -1,5 +1,4 @@
-import { API, Auth, graphqlOperation } from "aws-amplify";
-import {getUser} from "graphql/queries";
+import { Auth } from "aws-amplify";
 
 async function signIn(email, password) {
   try {

@@ -3,21 +3,20 @@ import React from "react";
 import "../styles/globals.css";
 import "antd/dist/antd.css";
 
-import { Amplify } from "aws-amplify";
+import Amplify from "aws-amplify";
 import awsconfig from "aws-exports";
 Amplify.configure(awsconfig);
 
 import { Layout } from "antd";
 import Nav from "components/nav/nav";
 import {AuthProvider} from "../contexts/auth-context";
-import {UserProvider} from "../contexts/user-context";
+import {withAuthenticator} from "aws-amplify-react";
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   const { Header, Footer, Content } = Layout;
 
   return (
     <AuthProvider>
-      <UserProvider>
       <Head>
         <title>Wishlet</title>
         <link rel="icon" href="/favicon.ico" />
@@ -33,9 +32,8 @@ function MyApp({ Component, pageProps }) {
         </Layout>
         <Footer>Footer</Footer>
       </Layout>
-      </UserProvider>
     </AuthProvider>
   );
 }
 
-export default MyApp;
+export default App;

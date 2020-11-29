@@ -1,17 +1,18 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Tabs, Layout, Menu } from "antd";
-import { WishlistsContext } from "contexts/wishlists-context";
 import { AddWishlistModal } from "../wishlist";
 import ProfileListEditor from "./profile-list-editor";
+import {UserContext} from "contexts/user-context";
+import {observer} from "mobx-react-lite";
 
 const { TabPane } = Tabs;
 const { Sider, Content } = Layout;
 
-export default function ProfileList({}) {
-  const { state, selectWishlist } = useContext(WishlistsContext);
-  const { loading, wishlists, selectedWishlist, error } = state;
+const ProfileList = observer(({}) => {
+  const user = useContext(UserContext);
   const [showAddWishlist, setShowAddWishlist] = useState(false);
+  const [selectedWishlist, selectWishlist] = useState(null);
 
   return (
     <>
@@ -20,8 +21,8 @@ export default function ProfileList({}) {
           <Layout style={{ minHeight: '500px' }}>
             <StyledSider>
               <Menu>
-                {wishlists &&
-                  wishlists.map((list, i) => (
+                {user.wishlists &&
+                  user.wishlists.map((list, i) => (
                     <Menu.Item key={i} onClick={() => selectWishlist(list)}>
                       {list.name}
                     </Menu.Item>
@@ -43,7 +44,8 @@ export default function ProfileList({}) {
       />
     </>
   );
-}
+});
+export default ProfileList;
 
 const StyledTabs = styled(Tabs)`
   div.ant-tabs-content {
