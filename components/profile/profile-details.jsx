@@ -2,8 +2,6 @@ import React, {useContext, useState} from "react";
 import styled from "styled-components";
 import { Row, Col, Spin, Typography, Descriptions, Avatar, Statistic } from "antd";
 import { UserOutlined, EditOutlined } from "@ant-design/icons";
-import ProfileEditModal from "./profile-edit-modal";
-import useQueryParam from "hooks/use-query-param";
 import {UserContext} from "contexts/user-context";
 import {observer} from "mobx-react-lite";
 
@@ -11,7 +9,6 @@ const { Title } = Typography;
 
 const ProfileDetails = observer(() => {
   const user = useContext(UserContext);
-  const { profile, loading, error } = user;
   const [editing, setEditing] = useState(false);
 
   const {
@@ -24,7 +21,7 @@ const ProfileDetails = observer(() => {
     youtube,
     pinterest,
     instagram,
-  } = profile || {};
+  } = user.profile || {};
 
   return (
      <Container>
@@ -45,7 +42,7 @@ const ProfileDetails = observer(() => {
            />)}
          </Col>
          <Col span={18}>
-           {profile && (
+           {user.profile && (
              <Row>
                <Row gutter={[50, 50]} justify="end">
                  <Col>
@@ -85,7 +82,7 @@ const ProfileDetails = observer(() => {
            )}
          </Col>
        </Row>
-       {loading && (
+       {user.loading && (
          <Loading>
            <Spin size="large" />
          </Loading>

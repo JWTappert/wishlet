@@ -7,15 +7,15 @@ export default function AddWishlistModal({ addListVisible, setAddListVisible }) 
   const uid = useQueryParam("uid");
   const [form] = Form.useForm();
   const [name, setName] = useState("");
-  const user = useContext(UserContext);
+  const User = useContext(UserContext);
 
   function handleFinish(values) {
-    user.createWishlist(values.name, uid);
+    User.createWishlist(values.name, uid);
     setAddListVisible(!addListVisible)
   }
 
   function handleOk() {
-    user.createWishlist(form.getFieldValue("name"), uid);
+    User.createWishlist(form.getFieldValue("name"), uid);
     setAddListVisible(!addListVisible)
   }
 

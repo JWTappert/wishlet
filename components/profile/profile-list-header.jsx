@@ -2,21 +2,21 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import {Button, Layout, Popconfirm, Space, Typography} from "antd";
 import {AddWishlistItemModal} from "components/wishlist";
-import {WishlistsContext} from "contexts/wishlists-context";
-import useQueryParam from "../../hooks/use-query-param";
+import useQueryParam from "hooks/use-query-param";
+import {UserContext} from "contexts/user-context";
 const {Header} = Layout;
 const {Text} = Typography;
 
 export default function ProfileListHeader({ list, showAddWishlist, setShowAddWishlist }) {
   const uid = useQueryParam("uid");
+  const User = useContext(UserContext);
   const [addItemOpen, setAddItemOpen] = useState(false);
-  const { deleteWishlist, selectWishlist } = useContext(WishlistsContext);
 
   async function confirm(wishlistId) {
     if (!wishlistId || !uid) return;
     try {
-      await deleteWishlist(wishlistId, uid);
-      selectWishlist(null);
+      await User.deleteWishlist(wishlistId, uid)
+      User.selectedList = null;
     } catch(error) {
       console.error(error);
     }

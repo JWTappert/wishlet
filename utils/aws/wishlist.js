@@ -37,11 +37,13 @@ async function updateWishlist() {
   }
 }
 
-async function deleteWishlist() {
+async function deleteWishlist(wishlistID) {
   try {
-
+    const response = await API.graphql({ query: mutations.deleteWishlist, variables: { input: { id: wishlistID}}});
+    console.log('result', response.data);
+    return response.data.deleteWishlist;
   } catch(error) {
-
+    console.error(error);
   }
 }
 
@@ -53,11 +55,21 @@ async function getItem() {
   }
 }
 
-async function createItem() {
+async function listItems(wishlistID) {
   try {
-
+    const response = await API.graphql({query: queries.listItems, variables: {filter: { wishlistID }}});
+    return response.data.listItems.items;
   } catch(error) {
+    console.error(error);
+  }
+}
 
+async function createItem(wishlistID, name, link) {
+  try {
+    const response = await API.graphql({query: mutations.createItem, variables: {input: { wishlistID, name, link } }})
+    return response.data.createItem;
+  } catch(error) {
+    console.error(error);
   }
 }
 
@@ -69,11 +81,12 @@ async function updateItem() {
   }
 }
 
-async function deleteItem() {
+async function deleteItem(itemID) {
   try {
-
+    const response = await API.graphql({query: mutations.deleteItem, variables: {input: { id: itemID } }})
+    return response.data.deleteItem;
   } catch(error) {
-
+    console.error(error);
   }
 }
 
@@ -83,6 +96,7 @@ export {
   updateWishlist,
   deleteWishlist,
   getItem,
+  listItems,
   createItem,
   updateItem,
   deleteItem,

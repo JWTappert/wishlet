@@ -1,10 +1,13 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import {makeAutoObservable, runInAction, toJS} from "mobx";
+import {serialize} from "../utils/aws/serializer";
 
 export default class UserState {
   transportLayer
   userId
+  User
   profile
-
+  wishlists
+  selectedList = null;
   error
   loading = true;
 
@@ -21,8 +24,10 @@ export default class UserState {
   fetchUser() {
     this.loading = true;
     this.transportLayer.getUser(this.userId).then(user => {
+      this.User = serialize(user);
       runInAction(() => {
-        this.profile = user;
+        this.profile = this.User.profile;
+        this.wishlists = this.User.wishlists;
         this.loading = false;
       });
     })
@@ -35,8 +40,9 @@ export default class UserState {
   updateUser(profile) {
     this.loading = true;
     this.transportLayer.updateUser(profile).then(user => {
+      const serializedUser = serialize(user);
       runInAction(() => {
-        this.profile = user;
+        this.profile = serializedUser.profile;
         this.loading = false;
       });
     })
@@ -50,21 +56,50 @@ export default class UserState {
     this.loading = true;
     this.transportLayer.createWishlist(this.userId, name).then(list => {
       runInAction(() => {
+        this.wishlists[list.id] = {...list};
         this.loading = false;
-        this.profile.wishlists.items.push(list);
       });
     })
+  }
+
+  deleteWishlist(wishlistId) {
+    this.loading = true;
+    this.transportLayer.deleteWishlist(wishlistId).then(list => {
+      delete this.wishlists[wishlistId];
+      this.loading = false;
+    });
+  }
+
+  setSelectedWishlist(list) {
+    this.selectedList = list;
+  }
+
+  addItemToWishlist(wishlistId, name, link) {
+    this.loading = true;
+    this.transportLayer.createItem(wishlistId, name, link).then(item => {
+      runInAction(() => {
+        this.wishlists[wishlistId].items[item.id] = {...item};
+        this.loading = false;
+      });
+    });
+  }
+
+  removeItemFromWishlist(itemId) {
+    this.loading = true;
+    this.transportLayer.deleteItem(itemId).then(() => {
+      runInAction(() => {
+        this.fetchUser();
+        delete this.wishlists[this.selectedList.id].items[itemId];
+        this.loading = false;
+      });
+    });
   }
 
   /*
     COMPUTED
   */
-  get wishlists() {
-    return this.profile?.wishlists.items;
-  }
-
   get wishlistCount() {
-    return this.profile?.wishlists.length || 0;
+    return this.wishlists.length || 0;
   }
 
   get items() {

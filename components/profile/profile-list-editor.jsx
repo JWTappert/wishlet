@@ -2,16 +2,21 @@ import React, { useContext } from "react";
 import ProfileListHeader from "./profile-list-header";
 import {List, Space, Popconfirm, message} from "antd";
 import {StarOutlined, LikeOutlined, DeleteOutlined} from "@ant-design/icons";
-import {WishlistsContext} from "contexts/wishlists-context";
+import {observer} from "mobx-react-lite";
+import {UserContext} from "contexts/user-context";
 
-export default function ProfileListEditor({ list, showAddWishlist, setShowAddWishlist }) {
-  const { removeItem } = useContext(WishlistsContext);
+const ProfileListEditor = observer(({ showAddWishlist, setShowAddWishlist }) => {
+  const User = useContext(UserContext);
+  async function removeItem(item) {
+    await User.removeItemFromWishlist(item.id);
+  }
+
   return (
     <>
-      <ProfileListHeader list={list} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
-      {list && (
+      <ProfileListHeader list={User.selectedList} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
+      {User.selectedList && (
         <List
-          dataSource={list.items}
+          dataSource={Object.values(User.selectedList.items)}
           itemLayout="vertical"
           size="large"
           pagination={{
@@ -33,8 +38,8 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
                   icon={DeleteOutlined}
                   text="Delete"
                   key="list-vertical-message"
-                  clickHandler={removeItem}
-                  listId={list.id}
+                  clickHandler={() => removeItem(item)}
+                  listId={User.selectedList.id}
                   itemId={item.id}
                 />,
               ]}
@@ -57,7 +62,8 @@ export default function ProfileListEditor({ list, showAddWishlist, setShowAddWis
       )}
       </>
   )
-}
+});
+export default ProfileListEditor;
 
 const IconText = ({ icon, text, clickHandler, listId, itemId }) => {
   function confirm(e) {

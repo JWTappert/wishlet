@@ -10,9 +10,8 @@ const { TabPane } = Tabs;
 const { Sider, Content } = Layout;
 
 const ProfileList = observer(({}) => {
-  const user = useContext(UserContext);
+  const User = useContext(UserContext);
   const [showAddWishlist, setShowAddWishlist] = useState(false);
-  const [selectedWishlist, selectWishlist] = useState(null);
 
   return (
     <>
@@ -21,16 +20,16 @@ const ProfileList = observer(({}) => {
           <Layout style={{ minHeight: '500px' }}>
             <StyledSider>
               <Menu>
-                {user.wishlists &&
-                  user.wishlists.map((list, i) => (
-                    <Menu.Item key={i} onClick={() => selectWishlist(list)}>
+                {User.wishlists &&
+                  Object.values(User.wishlists).map((list, i) => (
+                    <Menu.Item key={i} onClick={() => User.setSelectedWishlist(list)}>
                       {list.name}
                     </Menu.Item>
                   ))}
               </Menu>
             </StyledSider>
             <Content>
-              <ProfileListEditor list={selectedWishlist} showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
+              <ProfileListEditor showAddWishlist={showAddWishlist} setShowAddWishlist={setShowAddWishlist} />
             </Content>
           </Layout>
         </TabPane>
