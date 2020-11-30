@@ -4,7 +4,6 @@ import {LoadingOutlined, UploadOutlined} from "@ant-design/icons";
 import useQueryParam from "hooks/use-query-param";
 
 const PhotoUpload = ({url, setUrl}) => {
-  const uid = useQueryParam("uid");
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('');
   const uploadInput = useRef(null);

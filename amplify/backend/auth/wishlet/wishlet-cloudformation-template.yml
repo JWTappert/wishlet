@@ -109,10 +109,7 @@ Parameters:
                     
   userPoolGroupList:
     Type: CommaDelimitedList
-      
-  adminQueryGroup:
-    Type: String
-              
+                  
   serviceName:
     Type: String
                     

@@ -1,5 +1,6 @@
 type User 
-  @model 
+  @model
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }])
   {
     id: ID!
     name: String!
@@ -16,7 +17,8 @@ type User
 }
 
 type Wishlist 
-  @model 
+  @model
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }])
   @key(name: "byWishlists", fields: ["userID"]) 
   {
     id: ID!
@@ -27,7 +29,8 @@ type Wishlist
 }
 
 type Item 
-  @model 
+  @model
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }])
   @key(name: "byWishlist", fields: ["wishlistID", "name"]) 
   {
     id: ID!

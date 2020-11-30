@@ -6,13 +6,20 @@
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7,
-              "description": "wishlet api key"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authwishlet"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "API_KEY",
+              "apiKeyConfig": {
+                "apiKeyExpirationDays": 365,
+                "description": "Testing Key"
+              }
+            }
+          ]
         }
       }
     },
@@ -60,6 +67,12 @@
           ]
         }
       ]
+    }
+  },
+  "storage": {
+    "wishlet": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
     }
   }
 }

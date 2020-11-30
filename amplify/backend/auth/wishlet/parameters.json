@@ -72,11 +72,10 @@
         "email"
     ],
     "userPoolGroups": false,
-    "adminQueries": true,
+    "adminQueries": false,
     "triggers": "{}",
     "hostedUI": false,
     "userPoolGroupList": [],
-    "adminQueryGroup": "admin",
     "serviceName": "Cognito",
     "parentStack": {
         "Ref": "AWS::StackId"
