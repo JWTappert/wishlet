@@ -1,5 +1,7 @@
-import {makeAutoObservable, runInAction, toJS} from "mobx";
-import {serialize} from "../utils/aws/serializer";
+import {makeAutoObservable, runInAction } from "mobx";
+import omit from "lodash/omit";
+import flattenDeep from "lodash/flattenDeep";
+import {serialize} from "utils/aws/serializer";
 
 export default class UserState {
   transportLayer
@@ -37,9 +39,10 @@ export default class UserState {
       });
   }
 
-  updateUser(profile) {
+  updateUser(updates) {
     this.loading = true;
-    this.transportLayer.updateUser(profile).then(user => {
+    const updatedUser = {...omit(this.profile, ['createdAt', 'updatedAt']), ...updates };
+    this.transportLayer.updateUser(updatedUser).then(user => {
       const serializedUser = serialize(user);
       runInAction(() => {
         this.profile = serializedUser.profile;
@@ -99,11 +102,13 @@ export default class UserState {
     COMPUTED
   */
   get wishlistCount() {
-    return this.wishlists.length || 0;
+    return Object.values(this.wishlists).length || 0;
   }
 
   get items() {
-    return 9;
+    const wishlists = Object.values(this.wishlists);
+    const items = flattenDeep(wishlists.map(wishlist => Object.values(wishlist.items)));
+    return items.length;
   }
 
   get following() {

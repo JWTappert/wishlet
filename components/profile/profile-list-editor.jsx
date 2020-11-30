@@ -23,7 +23,7 @@ const ProfileListEditor = observer(({ showAddWishlist, setShowAddWishlist }) => 
             onChange: page => {
               console.log(page);
             },
-            pageSize: 3,
+            pageSize: 10,
           }}
           renderItem={item => (
             <List.Item

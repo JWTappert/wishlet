@@ -1,26 +1,22 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Modal, Form, Input } from "antd";
 import useQueryParam from "hooks/use-query-param";
-import {ProfileContext} from "contexts/profile-context";
 import PhotoUpload from "../photo-upload";
+import {UserContext} from "contexts/user-context";
 
 function ProfileEditModal({ showEdit, setEdit }) {
-  const uid = useQueryParam("uid");
-  const {
-    state: { profile, loading },
-    handleUpdateUserProfile,
-  } = useContext(ProfileContext);
+  const User = useContext(UserContext);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/350x150');
-  const [fields, setFields] = useState(mapProfileToFields(profile));
+  const [fields, setFields] = useState(mapProfileToFields(User.profile));
 
   useEffect(() => {
-    setFields(mapProfileToFields(profile))
-    setPhotoURL(profile?.photoURL);
-  }, [profile]);
+    setFields(mapProfileToFields(User.profile))
+    setPhotoURL(User.profile?.photoURL);
+  }, [User.profile]);
 
   const onSubmit = () => {
     const updates = mapFieldsToProfile(fields);
-    handleUpdateUserProfile(uid, updates);
+    User.updateUser(updates);
     setEdit(!showEdit);
   }
 
@@ -34,7 +30,7 @@ function ProfileEditModal({ showEdit, setEdit }) {
       <EditProfileForm
         fields={fields}
         onChange={(newFields) => setFields(newFields)}
-        loading={loading}
+        loading={User.loading}
         photoUrl={photoURL}
         setPhotoUrl={setPhotoURL}
       />
