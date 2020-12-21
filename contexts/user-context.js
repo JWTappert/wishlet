@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
   let uid = useQueryParam("uid");
 
   if (!uid) {
-    uid = cognitoUser.username;
+    uid = cognitoUser?.username;
   }
 
   return <UserContext.Provider value={new UserState(API, { username: uid })}>{children}</UserContext.Provider>;
