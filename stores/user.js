@@ -61,8 +61,10 @@ export default class UserState {
       runInAction(() => {
         this.wishlists[list.id] = {...list};
         this.loading = false;
+        this.selectedList = list;
       });
     })
+      .catch(error => console.error(error))
   }
 
   deleteWishlist(wishlistId) {

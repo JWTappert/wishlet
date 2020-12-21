@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -7,14 +7,22 @@ import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "contexts/auth-context";
 import {signOut} from "utils/aws/auth";
 import WishletIcon from "../icons/wishlet";
+import {UserContext} from "contexts/user-context";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
 export default function Nav({}) {
-  const user = useContext(AuthContext);
+  const cognitoUser = useContext(AuthContext);
+  const userActions = useContext(UserContext)
   const [showModal, setShowModal] = useState(false);
   const [listName, setListName] = useState("");
   const router = useRouter();
+
+  function handleCreateWishlist() {
+    userActions.createWishlist(listName);
+    setListName('');
+    setShowModal(false);
+  }
 
   return (
     <>
@@ -23,10 +31,10 @@ export default function Nav({}) {
           <WishletIcon />
         </Logo>
         <Menu theme={"dark"} mode="horizontal" style={{ textAlign: "right" }}>
-          <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>
-            List
+          <Menu.Item onClick={() => setShowModal(true)}>
+            <PlusOutlined />
           </Menu.Item>
-          {!user && (
+          {!cognitoUser && (
             <Menu.Item
               icon={<UserOutlined />}
               onClick={() => router.push("/signin")}
@@ -34,14 +42,14 @@ export default function Nav({}) {
               Sign In
             </Menu.Item>
           )}
-          {user && (
+          {cognitoUser && (
             <StyledSubMenu
               style={{ span: {margin: '0 5px'}}}
-              icon={user.photoURL ? <Avatar size="small" src={user.photoURL} /> : <UserOutlined />}
-              title={user.displayName ? user.displayName : 'User'}
+              icon={cognitoUser.photoURL ? <Avatar size="small" src={cognitoUser.photoURL} /> : <UserOutlined />}
+              title={cognitoUser.displayName ? cognitoUser.displayName : 'User'}
             >
               <Menu.Item>
-                <Link href="/[uid]/profile" as={`/${user.username}/profile`}>
+                <Link href="/[uid]/profile" as={`/${cognitoUser.username}/profile`}>
                   <a>Profile</a>
                 </Link>
               </Menu.Item>
@@ -53,7 +61,7 @@ export default function Nav({}) {
       <Modal
         title="Create a wishlist"
         visible={showModal}
-        onOk={() => console.log(listName)}
+        onOk={() => handleCreateWishlist(listName)}
         onCancel={() => setShowModal(false)}
         okText="Create"
       >
@@ -62,7 +70,7 @@ export default function Nav({}) {
           placeholder="Wishlist Name"
           value={listName}
           onChange={({ target }) => setListName(target.value)}
-          onPressEnter={({ target }) => onFinish(target.value)}
+          onPressEnter={({ target }) => handleCreateWishlist(target.value)}
         />
       </Modal>
     </>

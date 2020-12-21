@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import {UserContext, UserProvider} from "contexts/user-context";
+import {UserContext} from "contexts/user-context";
 import {observer} from "mobx-react-lite";
 
 const Test = observer(() => {

@@ -2,13 +2,11 @@ import React from "react";
 import { Card, Layout } from "antd";
 import ProfileDetails from "./profile-details";
 import ProfileList from "./profile-lists";
-import {UserProvider} from "contexts/user-context";
 
 const { Header, Content } = Layout;
 
 export default function ProfileLayout() {
   return (
-    <UserProvider>
     <Layout style={{ height: "100%" }}>
       {/*<Header style={{ background: "transparent" }}></Header>*/}
         <Layout>
@@ -20,7 +18,6 @@ export default function ProfileLayout() {
           </Content>
         </Layout>
       </Layout>
-    </UserProvider>
   );
 }
 
