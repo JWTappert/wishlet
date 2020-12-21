@@ -6,6 +6,7 @@ import { Avatar, Input, Menu, Modal, Layout } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { AuthContext } from "contexts/auth-context";
 import {signOut} from "utils/aws/auth";
+import WishletIcon from "../icons/wishlet";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
@@ -18,7 +19,9 @@ export default function Nav({}) {
   return (
     <>
       <Header>
-        <Logo onClick={() => router.push("/")} />
+        <Logo onClick={() => router.push("/")}>
+          <WishletIcon />
+        </Logo>
         <Menu theme={"dark"} mode="horizontal" style={{ textAlign: "right" }}>
           <Menu.Item icon={<PlusOutlined />} onClick={() => setShowModal(true)}>
             List
@@ -73,9 +76,7 @@ const StyledSubMenu = styled(SubMenu)`
 `;
 
 const Logo = styled.div`
-  width: 120px;
-  height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 24px 16px 0;
+  width: 150px;
   float: left;
+  padding: 10px;
 `;
