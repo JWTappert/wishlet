@@ -5,9 +5,8 @@ import {EventContext} from "../contexts/event-context";
 
 export default function Home() {
   const eventState = useContext(EventContext);
-  const [events, setEvents] = useState(eventState.events);
+  const [events,] = useState(eventState.events);
   
-  console.log({eventState})
   return (
       <Container>
         <Title>Recent Activity</Title>
