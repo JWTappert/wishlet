@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-function Card({ title, details }) {
+function Card({ event }) {
   return (
     <CardContainer>
-      <h1>User created new wislist</h1>
-      <p>derpstarr added a new wishlist called <i>Homepage test</i></p>
-      <p>5:06pm</p>
+      <h1>{event.title}</h1>
+      <p>{event.createdAt}</p>
     </CardContainer>
   )
 }

@@ -22,13 +22,22 @@ export const createUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -53,13 +62,22 @@ export const updateUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -84,13 +102,22 @@ export const deleteUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -116,9 +143,14 @@ export const createWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -127,13 +159,22 @@ export const createWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -159,9 +200,14 @@ export const updateWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -170,13 +216,22 @@ export const updateWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -202,9 +257,14 @@ export const deleteWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -213,13 +273,22 @@ export const deleteWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -246,20 +315,33 @@ export const createItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -286,20 +368,33 @@ export const updateItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -326,19 +421,95 @@ export const deleteItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
       updatedAt
     }
   }

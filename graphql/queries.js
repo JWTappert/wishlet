@@ -1,6 +1,46 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const syncUsers = /* GraphQL */ `
+  query SyncUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUsers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        displayName
+        email
+        photoURL
+        website
+        facebook
+        instagram
+        twitter
+        youtube
+        wishlists {
+          nextToken
+          startedAt
+        }
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -19,13 +59,22 @@ export const getUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -49,11 +98,68 @@ export const listUsers = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncWishlists = /* GraphQL */ `
+  query SyncWishlists(
+    $filter: ModelWishlistFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncWishlists(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        userID
+        user {
+          id
+          name
+          displayName
+          email
+          photoURL
+          website
+          facebook
+          instagram
+          twitter
+          youtube
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+        items {
+          nextToken
+          startedAt
+        }
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -76,9 +182,14 @@ export const getWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -87,13 +198,22 @@ export const getWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -119,16 +239,68 @@ export const listWishlists = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncItems = /* GraphQL */ `
+  query SyncItems(
+    $filter: ModelItemFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncItems(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        wishlistID
+        wishlist {
+          id
+          name
+          userID
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+        name
+        link
+        photoURL
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -152,20 +324,33 @@ export const getItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -183,16 +368,101 @@ export const listItems = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         name
         link
         photoURL
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncEvents = /* GraphQL */ `
+  query SyncEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncEvents(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        type
+        createdAt
+        action
+        userID
+        wishlistID
+        initiatingUserID
+        receivingUserID
+        _version
+        _deleted
+        _lastChangedAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const getEvent = /* GraphQL */ `
+  query GetEvent($id: ID!) {
+    getEvent(id: $id) {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const listEvents = /* GraphQL */ `
+  query ListEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        type
+        createdAt
+        action
+        userID
+        wishlistID
+        initiatingUserID
+        receivingUserID
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;

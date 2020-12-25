@@ -19,13 +19,22 @@ export const onCreateUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -47,13 +56,22 @@ export const onUpdateUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -75,13 +93,22 @@ export const onDeleteUser = /* GraphQL */ `
           id
           name
           userID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -104,9 +131,14 @@ export const onCreateWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -115,13 +147,22 @@ export const onCreateWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -144,9 +185,14 @@ export const onUpdateWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -155,13 +201,22 @@ export const onUpdateWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -184,9 +239,14 @@ export const onDeleteWishlist = /* GraphQL */ `
         youtube
         wishlists {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       items {
         items {
@@ -195,13 +255,22 @@ export const onDeleteWishlist = /* GraphQL */ `
           name
           link
           photoURL
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -225,20 +294,33 @@ export const onCreateItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -262,20 +344,33 @@ export const onUpdateItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -299,19 +394,86 @@ export const onDeleteItem = /* GraphQL */ `
           instagram
           twitter
           youtube
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
         items {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        owner
       }
       name
       link
       photoURL
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent {
+    onCreateEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent {
+    onUpdateEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent {
+    onDeleteEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
       updatedAt
     }
   }

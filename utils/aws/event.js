@@ -1,4 +1,4 @@
-import { API } from "aws-amplify";
+import {API} from "aws-amplify";
 import * as queries from "graphql/queries";
 import * as mutations from "graphql/mutations";
 
@@ -14,11 +14,28 @@ async function createEvent() {
 async function getEvents() {
   try {
     const response = await API.graphql({query: queries.listEvents });
-    return response.data.listEvents;
+    return response.data.listEvents.items.map(serializeEvent);
   } catch(error) {
     console.error(error);
     throw error;
   }
+}
+
+function serializeEvent(event) {
+  const serializedEvent = {
+    title: '',
+    createdAt: event.createdAt
+  }
+  
+  if (event.type === 'user') {
+    serializedEvent.title = "USER FOLLOWED OTHER USER"
+  }
+  
+  if (event.type === 'wishlist') {}
+  
+  if (event.type === 'item') {}
+  
+  return serializedEvent;
 }
 
 export {
