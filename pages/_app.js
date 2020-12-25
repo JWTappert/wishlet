@@ -12,6 +12,7 @@ import Nav from "components/nav/nav";
 import {AuthProvider} from "../contexts/auth-context";
 import {withAuthenticator} from "aws-amplify-react";
 import {UserProvider} from "../contexts/user-context";
+import {EventProvider} from "../contexts/event-context";
 
 function App({ Component, pageProps }) {
   const { Header, Footer, Content } = Layout;
@@ -19,21 +20,23 @@ function App({ Component, pageProps }) {
   return (
     <AuthProvider>
       <UserProvider>
-      <Head>
-        <title>Wishlet</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Layout>
-        <Header>
-          <Nav />
-        </Header>
-        <Layout>
-          <Content style={{ margin: "0 10%" }}>
-            <Component {...pageProps} />
-          </Content>
-        </Layout>
-        <Footer>Footer</Footer>
-      </Layout>
+        <EventProvider>
+          <Head>
+            <title>Wishlet</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <Layout>
+            <Header>
+              <Nav />
+            </Header>
+            <Layout>
+              <Content style={{ margin: "0 10%" }}>
+                <Component {...pageProps} />
+              </Content>
+            </Layout>
+            <Footer>Footer</Footer>
+          </Layout>
+        </EventProvider>
       </UserProvider>
     </AuthProvider>
   );

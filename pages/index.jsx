@@ -1,25 +1,18 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import styled from "styled-components";
 import Card from "../components/card";
-import {getEvents} from "utils/aws/event";
+import {EventContext} from "../contexts/event-context";
 
 export default function Home() {
-  const [events, setEvents] = useState([]);
+  const eventState = useContext(EventContext);
+  const [events, setEvents] = useState(eventState.events);
   
-  async function fetchEvents() {
-    const events =  await getEvents();
-    setEvents(events.items || []);
-  }
-  
-  useEffect(() => {
-    fetchEvents();
-  }, [])
-  
+  console.log({eventState})
   return (
-    <Container>
-      <Title>Recent Activity</Title>
-      {events && events?.map(event => <Card event={event} />)}
-    </Container>
+      <Container>
+        <Title>Recent Activity</Title>
+        {events.length ? events?.map(event => <Card event={event} />) : <p>no events...</p>}
+      </Container>
   );
 }
 
