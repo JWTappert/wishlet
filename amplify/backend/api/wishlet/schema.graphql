@@ -40,3 +40,23 @@ type Item
     link: String
     photoURL: String
 }
+
+type Event
+  @model
+  @auth(rules: [{allow: private, operations: [read]}])
+  {
+  id: ID!
+  type : EventType!
+  createdAt: String
+  action: String
+  userID: String
+  wishlistID: String
+  initiatingUserID: String
+  receivingUserID: String
+}
+
+enum EventType {
+  wishlist
+  item
+  user
+}

@@ -424,3 +424,57 @@ export const onDeleteItem = /* GraphQL */ `
     }
   }
 `;
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent {
+    onCreateEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent {
+    onUpdateEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent {
+    onDeleteEvent {
+      id
+      type
+      createdAt
+      action
+      userID
+      wishlistID
+      initiatingUserID
+      receivingUserID
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
